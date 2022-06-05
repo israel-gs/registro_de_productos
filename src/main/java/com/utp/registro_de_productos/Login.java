@@ -6,9 +6,12 @@ package com.utp.registro_de_productos;
 
 import com.utp.registro_de_productos.controller.LoginController;
 import com.utp.registro_de_productos.core.MySqlConnection;
+import com.utp.registro_de_productos.model.UserModel;
+import io.vavr.control.Either;
 import java.awt.Color;
 import java.sql.Connection;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -123,7 +126,20 @@ public class Login extends javax.swing.JFrame {
         String username = txtUsername.getText();
         String password = txtPassword.getText();
         LoginController loginController = new LoginController();
-        loginController.onLoginClick(username, password);
+        Either<String, UserModel> userResponse = loginController.onLoginClick(username, password);
+        // isRight get UserModel (user logged)
+        // isLeft get String (error message) 
+        if (userResponse.isRight()) {
+            UserModel user = userResponse.right().get();
+            if (user.getIsAdmin()) {
+                System.out.println("Es admin");
+            } else {
+                System.out.println("No es admin");
+            }
+        }
+        if (userResponse.isLeft()) {
+            JOptionPane.showMessageDialog(null, userResponse.left().get());
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
