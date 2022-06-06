@@ -102,6 +102,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnLogin">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/com/utp/registro_de_productos/assets/icons/sign-in-alt.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Ingresar"/>
       </Properties>
       <Events>
@@ -110,7 +113,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="DB Connection"/>
+        <Property name="text" type="java.lang.String" value="db connection:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblConnectionStatus">

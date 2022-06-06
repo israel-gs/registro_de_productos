@@ -4,6 +4,7 @@
  */
 package com.utp.registro_de_productos;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import com.utp.registro_de_productos.controller.LoginController;
 import com.utp.registro_de_productos.core.MySqlConnection;
 import com.utp.registro_de_productos.model.UserModel;
@@ -12,6 +13,7 @@ import java.awt.Color;
 import java.sql.Connection;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 /**
  *
@@ -64,6 +66,7 @@ public class Login extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel3.setText("La Vaca");
 
+        btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/utp/registro_de_productos/assets/icons/sign-in-alt.png"))); // NOI18N
         btnLogin.setText("Ingresar");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -71,7 +74,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("DB Connection");
+        jLabel4.setText("db connection:");
 
         lblConnectionStatus.setText("-");
 
@@ -123,22 +126,33 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        LoginController loginController = new LoginController();
-        Either<String, UserModel> userResponse = loginController.onLoginClick(username, password);
-        // isRight get UserModel (user logged)
-        // isLeft get String (error message) 
-        if (userResponse.isRight()) {
-            UserModel user = userResponse.right().get();
-            if (user.getIsAdmin()) {
-                System.out.println("Es admin");
-            } else {
-                System.out.println("No es admin");
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim();
+        if (username.isBlank()) {
+            JOptionPane.showMessageDialog(null, "El usuario es requerido");
+        } else if (password.isBlank()) {
+            JOptionPane.showMessageDialog(null, "La contraseña es requerida");
+        } else {
+            LoginController loginController = new LoginController();
+            Either<String, UserModel> userResponse = loginController.onLoginClick(username, password);
+            // isRight get UserModel (user logged)
+            // isLeft get String (error message) 
+            if (userResponse.isRight()) {
+                UserModel user = userResponse.right().get();
+                if (user.getIsAdmin()) {
+                    MainScreen mainScreen = new MainScreen(user);
+                    mainScreen.setResizable(false);
+                    mainScreen.setLocationRelativeTo(null);
+                    mainScreen.setVisible(true);
+                    this.dispose();
+                    System.out.println("Es admin");
+                } else {
+                    System.out.println("No es admin");
+                }
             }
-        }
-        if (userResponse.isLeft()) {
-            JOptionPane.showMessageDialog(null, userResponse.left().get());
+            if (userResponse.isLeft()) {
+                JOptionPane.showMessageDialog(null, userResponse.left().get());
+            }
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -152,20 +166,9 @@ public class Login extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            UIManager.setLookAndFeel( new FlatLightLaf() );
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
         }
         //</editor-fold>
         
