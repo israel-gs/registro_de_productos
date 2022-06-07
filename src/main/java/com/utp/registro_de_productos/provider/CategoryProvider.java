@@ -38,9 +38,9 @@ public class CategoryProvider {
             int result = query.update("INSERT INTO registro_de_productos.category (id, name, description) VALUES ('" + category.getID() + "', '" + category.getName() + "', '" + category.getDescription() + "');");
             return switch (result) {
                 case 1 ->
-                    Either.right("La categoria se registro correctamente");
+                    Either.right("La categoría se registró correctamente");
                 case 0 ->
-                    Either.left("La categoria no se registro");
+                    Either.left("La categoría no se registró");
                 default ->
                     Either.left("Ocurrió un error");
             };
@@ -55,9 +55,9 @@ public class CategoryProvider {
             int result = query.update("UPDATE registro_de_productos.category t SET t.name = '" + category.getName() + "', t.description = '" + category.getDescription() + "' WHERE t.id LIKE '" + category.getID() + "';");
             return switch (result) {
                 case 1 ->
-                    Either.right("La categoria se actualizo correctamente");
+                    Either.right("La categoría se actualizó correctamente");
                 case 0 ->
-                    Either.left("La categoria no se actualizo");
+                    Either.left("La categoría no se actualizó");
                 default ->
                     Either.left("Ocurrió un error");
             };
@@ -72,9 +72,9 @@ public class CategoryProvider {
             int result = query.update("DELETE FROM registro_de_productos.category WHERE id LIKE '" + id + "';");
             return switch (result) {
                 case 1 ->
-                    Either.right("La categoria se elimino correctamente");
+                    Either.right("La categoría se eliminó correctamente");
                 case 0 ->
-                    Either.left("La categoria no se elimino");
+                    Either.left("La categoría no se eliminó");
                 default ->
                     Either.left("Ocurrió un error");
             };

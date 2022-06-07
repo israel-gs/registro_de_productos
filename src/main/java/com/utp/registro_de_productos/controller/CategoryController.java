@@ -36,5 +36,10 @@ public class CategoryController {
         Either<String, String> response = new CategoryProvider().updateCategory(category);
         return response;
     }
+    
+    public Either<String, String> onAdd(CategoryModel category) {
+        Either<String, String> response = new CategoryProvider().insertCategory(category);
+        return response;
+    }
 
 }
