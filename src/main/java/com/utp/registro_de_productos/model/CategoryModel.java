@@ -6,6 +6,15 @@ public class CategoryModel {
     private String name;
     private String description;
 
+    public CategoryModel() {
+    }
+
+    public CategoryModel(String id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
     public String getID() {
         return id;
     }
@@ -28,5 +37,10 @@ public class CategoryModel {
 
     public void setDescription(String value) {
         this.description = value;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

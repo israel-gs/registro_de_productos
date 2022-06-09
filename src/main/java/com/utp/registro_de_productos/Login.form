@@ -103,7 +103,7 @@
     <Component class="javax.swing.JButton" name="btnLogin">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/com/utp/registro_de_productos/assets/icons/sign-in-alt.png"/>
+          <Image iconType="3" name="/sign-in-alt.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Ingresar"/>
       </Properties>

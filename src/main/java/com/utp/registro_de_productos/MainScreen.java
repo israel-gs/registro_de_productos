@@ -6,13 +6,19 @@ package com.utp.registro_de_productos;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.utp.registro_de_productos.controller.CategoryController;
+import com.utp.registro_de_productos.controller.EmployeeController;
+import com.utp.registro_de_productos.controller.ProductController;
+import com.utp.registro_de_productos.controller.ReportsController;
 import com.utp.registro_de_productos.controller.SupplierController;
 import com.utp.registro_de_productos.model.CategoryModel;
+import com.utp.registro_de_productos.model.ProductModel;
 import com.utp.registro_de_productos.model.SupplierModel;
 import com.utp.registro_de_productos.model.UserModel;
+import com.utp.registro_de_productos.provider.ProductProvider;
 import io.vavr.control.Either;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -24,8 +30,10 @@ import javax.swing.table.TableModel;
  */
 public class MainScreen extends javax.swing.JFrame {
     UserModel user;
+    ArrayList<ProductModel> products = new ArrayList<>();
     /**
      * Creates new form MainScreen
+     * @param user
      */
     public MainScreen(UserModel user) {
         initComponents();
@@ -42,13 +50,17 @@ public class MainScreen extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        closeSessionButton = new javax.swing.JButton();
+        mainMenu = new javax.swing.JTabbedPane();
         productsPanel = new javax.swing.JPanel();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        peoplePanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        productTabbedPane = new javax.swing.JTabbedPane();
+        registerProductoPanel = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        productTable = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        productAddButton = new javax.swing.JButton();
+        productEditButton = new javax.swing.JButton();
+        productDeleteButton = new javax.swing.JButton();
         registerCategoryPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         categoryTable = new javax.swing.JTable();
@@ -64,10 +76,27 @@ public class MainScreen extends javax.swing.JFrame {
         supplierEditButton = new javax.swing.JButton();
         supplierDeleteButton = new javax.swing.JButton();
         peoplePanel = new javax.swing.JPanel();
-        jTabbedPane3 = new javax.swing.JTabbedPane();
-        peoplePanel4 = new javax.swing.JPanel();
-        peoplePanel5 = new javax.swing.JPanel();
+        peopleTabbedPane = new javax.swing.JTabbedPane();
+        registerEmployeePanel = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        employeeTable = new javax.swing.JTable();
+        jPanel5 = new javax.swing.JPanel();
+        employeeAddButton = new javax.swing.JButton();
+        employeeEditButton = new javax.swing.JButton();
+        employeeDeleteButton = new javax.swing.JButton();
+        registerUserPanel = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        userTable = new javax.swing.JTable();
+        jPanel6 = new javax.swing.JPanel();
+        userAddButton = new javax.swing.JButton();
+        userEditButton = new javax.swing.JButton();
+        userDeleteButton = new javax.swing.JButton();
         reportsPanel = new javax.swing.JPanel();
+        peopleTabbedPane1 = new javax.swing.JTabbedPane();
+        registerEmployeePanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        registerUserPanel1 = new javax.swing.JPanel();
         configurationPanel = new javax.swing.JPanel();
         controlPanel = new javax.swing.JPanel();
         jTabbedPane4 = new javax.swing.JTabbedPane();
@@ -80,38 +109,129 @@ public class MainScreen extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel1.setText("Control de Inventario");
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/utp/registro_de_productos/assets/icons/sign-out-alt.png"))); // NOI18N
-        jButton5.setText("Cerrar Sesion");
+        closeSessionButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sign-out-alt.png"))); // NOI18N
+        closeSessionButton.setText("Cerrar Sesion");
+        closeSessionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeSessionButtonActionPerformed(evt);
+            }
+        });
 
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        mainMenu.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        registerProductoPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                registerProductoPanelComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                registerProductoPanelComponentShown(evt);
+            }
+        });
+
+        productTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Id", "Nombre", "Descripción", "Precio", "Cantidad", "Categoría", "Proveedor"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
 
-        javax.swing.GroupLayout peoplePanel1Layout = new javax.swing.GroupLayout(peoplePanel1);
-        peoplePanel1.setLayout(peoplePanel1Layout);
-        peoplePanel1Layout.setHorizontalGroup(
-            peoplePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        productTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productTableMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(productTable);
+        productTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (productTable.getColumnModel().getColumnCount() > 0) {
+            productTable.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        productAddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus.png"))); // NOI18N
+        productAddButton.setText("Añadir");
+        productAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                productAddButtonActionPerformed(evt);
+            }
+        });
+
+        productEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit.png"))); // NOI18N
+        productEditButton.setText("Editar");
+        productEditButton.setEnabled(false);
+        productEditButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                productEditButtonActionPerformed(evt);
+            }
+        });
+
+        productDeleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trash.png"))); // NOI18N
+        productDeleteButton.setText("Eliminar");
+        productDeleteButton.setEnabled(false);
+        productDeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                productDeleteButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(productAddButton)
+                .addGap(18, 18, 18)
+                .addComponent(productEditButton)
+                .addGap(18, 18, 18)
+                .addComponent(productDeleteButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        peoplePanel1Layout.setVerticalGroup(
-            peoplePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(peoplePanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(productAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                    .addComponent(productDeleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(productEditButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        jTabbedPane2.addTab("Registro de productos", peoplePanel1);
+        javax.swing.GroupLayout registerProductoPanelLayout = new javax.swing.GroupLayout(registerProductoPanel);
+        registerProductoPanel.setLayout(registerProductoPanelLayout);
+        registerProductoPanelLayout.setHorizontalGroup(
+            registerProductoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        registerProductoPanelLayout.setVerticalGroup(
+            registerProductoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, registerProductoPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
+        );
+
+        productTabbedPane.addTab("Registro de productos", registerProductoPanel);
 
         registerCategoryPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
@@ -159,6 +279,7 @@ public class MainScreen extends javax.swing.JFrame {
             categoryTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
+        categoryAddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus.png"))); // NOI18N
         categoryAddButton.setText("Añadir");
         categoryAddButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,6 +287,7 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
 
+        categoryEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit.png"))); // NOI18N
         categoryEditButton.setText("Editar");
         categoryEditButton.setEnabled(false);
         categoryEditButton.addActionListener(new java.awt.event.ActionListener() {
@@ -174,6 +296,7 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
 
+        categoryDeleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trash.png"))); // NOI18N
         categoryDeleteButton.setText("Eliminar");
         categoryDeleteButton.setEnabled(false);
         categoryDeleteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -210,7 +333,7 @@ public class MainScreen extends javax.swing.JFrame {
         registerCategoryPanel.setLayout(registerCategoryPanelLayout);
         registerCategoryPanelLayout.setHorizontalGroup(
             registerCategoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         registerCategoryPanelLayout.setVerticalGroup(
@@ -222,7 +345,7 @@ public class MainScreen extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("Registro de categorias", registerCategoryPanel);
+        productTabbedPane.addTab("Registro de categorias", registerCategoryPanel);
 
         registerSupplierPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
@@ -270,6 +393,7 @@ public class MainScreen extends javax.swing.JFrame {
             supplierTable.getColumnModel().getColumn(2).setResizable(false);
         }
 
+        supplierAddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus.png"))); // NOI18N
         supplierAddButton.setText("Añadir");
         supplierAddButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -277,6 +401,7 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
 
+        supplierEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit.png"))); // NOI18N
         supplierEditButton.setText("Editar");
         supplierEditButton.setEnabled(false);
         supplierEditButton.addActionListener(new java.awt.event.ActionListener() {
@@ -285,6 +410,7 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
 
+        supplierDeleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trash.png"))); // NOI18N
         supplierDeleteButton.setText("Eliminar");
         supplierDeleteButton.setEnabled(false);
         supplierDeleteButton.addActionListener(new java.awt.event.ActionListener() {
@@ -321,7 +447,7 @@ public class MainScreen extends javax.swing.JFrame {
         registerSupplierPanel.setLayout(registerSupplierPanelLayout);
         registerSupplierPanelLayout.setHorizontalGroup(
             registerSupplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         registerSupplierPanelLayout.setVerticalGroup(
@@ -333,7 +459,7 @@ public class MainScreen extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("Registro de proveedores", registerSupplierPanel);
+        productTabbedPane.addTab("Registro de proveedores", registerSupplierPanel);
 
         javax.swing.GroupLayout productsPanelLayout = new javax.swing.GroupLayout(productsPanel);
         productsPanel.setLayout(productsPanelLayout);
@@ -341,42 +467,244 @@ public class MainScreen extends javax.swing.JFrame {
             productsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2))
+                .addComponent(productTabbedPane))
         );
         productsPanelLayout.setVerticalGroup(
             productsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(productsPanelLayout.createSequentialGroup()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(productTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 2, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Productos", productsPanel);
+        mainMenu.addTab("Productos", new javax.swing.ImageIcon(getClass().getResource("/box-open.png")), productsPanel); // NOI18N
 
-        javax.swing.GroupLayout peoplePanel4Layout = new javax.swing.GroupLayout(peoplePanel4);
-        peoplePanel4.setLayout(peoplePanel4Layout);
-        peoplePanel4Layout.setHorizontalGroup(
-            peoplePanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 724, Short.MAX_VALUE)
+        registerEmployeePanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                registerEmployeePanelComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                registerEmployeePanelComponentShown(evt);
+            }
+        });
+
+        employeeTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Id", "Nombre", "Descripcion"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        employeeTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                employeeTableMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(employeeTable);
+        employeeTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (employeeTable.getColumnModel().getColumnCount() > 0) {
+            employeeTable.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        employeeAddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus.png"))); // NOI18N
+        employeeAddButton.setText("Añadir");
+        employeeAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeeAddButtonActionPerformed(evt);
+            }
+        });
+
+        employeeEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit.png"))); // NOI18N
+        employeeEditButton.setText("Editar");
+        employeeEditButton.setEnabled(false);
+        employeeEditButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeeEditButtonActionPerformed(evt);
+            }
+        });
+
+        employeeDeleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trash.png"))); // NOI18N
+        employeeDeleteButton.setText("Eliminar");
+        employeeDeleteButton.setEnabled(false);
+        employeeDeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeeDeleteButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(employeeAddButton)
+                .addGap(18, 18, 18)
+                .addComponent(employeeEditButton)
+                .addGap(18, 18, 18)
+                .addComponent(employeeDeleteButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        peoplePanel4Layout.setVerticalGroup(
-            peoplePanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(employeeAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                    .addComponent(employeeDeleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(employeeEditButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        jTabbedPane3.addTab("Registro de empleados", peoplePanel4);
-
-        javax.swing.GroupLayout peoplePanel5Layout = new javax.swing.GroupLayout(peoplePanel5);
-        peoplePanel5.setLayout(peoplePanel5Layout);
-        peoplePanel5Layout.setHorizontalGroup(
-            peoplePanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 724, Short.MAX_VALUE)
+        javax.swing.GroupLayout registerEmployeePanelLayout = new javax.swing.GroupLayout(registerEmployeePanel);
+        registerEmployeePanel.setLayout(registerEmployeePanelLayout);
+        registerEmployeePanelLayout.setHorizontalGroup(
+            registerEmployeePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        peoplePanel5Layout.setVerticalGroup(
-            peoplePanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+        registerEmployeePanelLayout.setVerticalGroup(
+            registerEmployeePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, registerEmployeePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
         );
 
-        jTabbedPane3.addTab("Registro de usuarios", peoplePanel5);
+        peopleTabbedPane.addTab("Registro de empleado", registerEmployeePanel);
+
+        registerUserPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                registerUserPanelComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                registerUserPanelComponentShown(evt);
+            }
+        });
+
+        userTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Id", "Nombre", "RUC", "Teléfono"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        userTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                userTableMouseClicked(evt);
+            }
+        });
+        jScrollPane7.setViewportView(userTable);
+        userTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (userTable.getColumnModel().getColumnCount() > 0) {
+            userTable.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        userAddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus.png"))); // NOI18N
+        userAddButton.setText("Añadir");
+        userAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userAddButtonActionPerformed(evt);
+            }
+        });
+
+        userEditButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/edit.png"))); // NOI18N
+        userEditButton.setText("Editar");
+        userEditButton.setEnabled(false);
+        userEditButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userEditButtonActionPerformed(evt);
+            }
+        });
+
+        userDeleteButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trash.png"))); // NOI18N
+        userDeleteButton.setText("Eliminar");
+        userDeleteButton.setEnabled(false);
+        userDeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userDeleteButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(userAddButton)
+                .addGap(18, 18, 18)
+                .addComponent(userEditButton)
+                .addGap(18, 18, 18)
+                .addComponent(userDeleteButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(userAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                    .addComponent(userDeleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(userEditButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout registerUserPanelLayout = new javax.swing.GroupLayout(registerUserPanel);
+        registerUserPanel.setLayout(registerUserPanelLayout);
+        registerUserPanelLayout.setHorizontalGroup(
+            registerUserPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        registerUserPanelLayout.setVerticalGroup(
+            registerUserPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, registerUserPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
+        );
+
+        peopleTabbedPane.addTab("Registro de usuarios", registerUserPanel);
 
         javax.swing.GroupLayout peoplePanelLayout = new javax.swing.GroupLayout(peoplePanel);
         peoplePanel.setLayout(peoplePanelLayout);
@@ -384,46 +712,121 @@ public class MainScreen extends javax.swing.JFrame {
             peoplePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, peoplePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane3))
+                .addComponent(peopleTabbedPane))
         );
         peoplePanelLayout.setVerticalGroup(
             peoplePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane3)
+            .addGroup(peoplePanelLayout.createSequentialGroup()
+                .addComponent(peopleTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Personas", peoplePanel);
+        mainMenu.addTab("Personas", new javax.swing.ImageIcon(getClass().getResource("/user.png")), peoplePanel); // NOI18N
+
+        registerEmployeePanel1.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                registerEmployeePanel1ComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                registerEmployeePanel1ComponentShown(evt);
+            }
+        });
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/file-pdf.png"))); // NOI18N
+        jButton1.setText("Generar Reporte de Productos (.pdf)");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/file-pdf.png"))); // NOI18N
+        jButton2.setText("Generar Reporte de Proveedores (.pdf)");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout registerEmployeePanel1Layout = new javax.swing.GroupLayout(registerEmployeePanel1);
+        registerEmployeePanel1.setLayout(registerEmployeePanel1Layout);
+        registerEmployeePanel1Layout.setHorizontalGroup(
+            registerEmployeePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(registerEmployeePanel1Layout.createSequentialGroup()
+                .addGroup(registerEmployeePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 362, Short.MAX_VALUE))
+        );
+        registerEmployeePanel1Layout.setVerticalGroup(
+            registerEmployeePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(registerEmployeePanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(203, Short.MAX_VALUE))
+        );
+
+        peopleTabbedPane1.addTab("Reporte de productos", registerEmployeePanel1);
+
+        registerUserPanel1.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                registerUserPanel1ComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                registerUserPanel1ComponentShown(evt);
+            }
+        });
+
+        javax.swing.GroupLayout registerUserPanel1Layout = new javax.swing.GroupLayout(registerUserPanel1);
+        registerUserPanel1.setLayout(registerUserPanel1Layout);
+        registerUserPanel1Layout.setHorizontalGroup(
+            registerUserPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 700, Short.MAX_VALUE)
+        );
+        registerUserPanel1Layout.setVerticalGroup(
+            registerUserPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 321, Short.MAX_VALUE)
+        );
+
+        peopleTabbedPane1.addTab("Reporte de personas", registerUserPanel1);
 
         javax.swing.GroupLayout reportsPanelLayout = new javax.swing.GroupLayout(reportsPanel);
         reportsPanel.setLayout(reportsPanelLayout);
         reportsPanelLayout.setHorizontalGroup(
             reportsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, reportsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(peopleTabbedPane1))
         );
         reportsPanelLayout.setVerticalGroup(
             reportsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 356, Short.MAX_VALUE)
+            .addGroup(reportsPanelLayout.createSequentialGroup()
+                .addComponent(peopleTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Reportes", reportsPanel);
+        mainMenu.addTab("Reportes", new javax.swing.ImageIcon(getClass().getResource("/file-download.png")), reportsPanel); // NOI18N
 
         javax.swing.GroupLayout configurationPanelLayout = new javax.swing.GroupLayout(configurationPanel);
         configurationPanel.setLayout(configurationPanelLayout);
         configurationPanelLayout.setHorizontalGroup(
             configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 706, Short.MAX_VALUE)
         );
         configurationPanelLayout.setVerticalGroup(
             configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 356, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Configuración", configurationPanel);
+        mainMenu.addTab("Configuración", new javax.swing.ImageIcon(getClass().getResource("/wrench.png")), configurationPanel); // NOI18N
 
         javax.swing.GroupLayout peoplePanel6Layout = new javax.swing.GroupLayout(peoplePanel6);
         peoplePanel6.setLayout(peoplePanel6Layout);
         peoplePanel6Layout.setHorizontalGroup(
             peoplePanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 724, Short.MAX_VALUE)
+            .addGap(0, 700, Short.MAX_VALUE)
         );
         peoplePanel6Layout.setVerticalGroup(
             peoplePanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -436,7 +839,7 @@ public class MainScreen extends javax.swing.JFrame {
         peoplePanel7.setLayout(peoplePanel7Layout);
         peoplePanel7Layout.setHorizontalGroup(
             peoplePanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 724, Short.MAX_VALUE)
+            .addGap(0, 700, Short.MAX_VALUE)
         );
         peoplePanel7Layout.setVerticalGroup(
             peoplePanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -458,24 +861,25 @@ public class MainScreen extends javax.swing.JFrame {
             .addComponent(jTabbedPane4)
         );
 
-        jTabbedPane1.addTab("Control", controlPanel);
+        mainMenu.addTab("Control", new javax.swing.ImageIcon(getClass().getResource("/user-check.png")), controlPanel); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(mainMenu))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(311, 311, 311)
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(closeSessionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(243, 243, 243))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -483,9 +887,9 @@ public class MainScreen extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(mainMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(closeSessionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -514,6 +918,34 @@ public class MainScreen extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, response.left().get(), "Advertencia", JOptionPane.ERROR_MESSAGE);
         }
         supplierTable.setVisible(true);
+    }
+    
+    private void loadProductTable() {
+        productTable.setVisible(false);
+        Either<String, ArrayList<ProductModel>> productsResponse = new ProductProvider().getProducts();
+        if (productsResponse.isRight()) {
+            this.products = productsResponse.right().get();
+        }
+        Either<String, TableModel> response = new ProductController().onLoad();
+        if (response.isRight()) {
+            productTable.setModel(response.right().get());
+        }
+        if (response.isLeft()) {
+            JOptionPane.showMessageDialog(null, response.left().get(), "Advertencia", JOptionPane.ERROR_MESSAGE);
+        }
+        productTable.setVisible(true);
+    }
+
+    private void loadEmployeeTable() {
+        employeeTable.setVisible(false);
+        Either<String, TableModel> response = new EmployeeController().onLoad();
+        if (response.isRight()) {
+            employeeTable.setModel(response.right().get());
+        }
+        if (response.isLeft()) {
+            JOptionPane.showMessageDialog(null, response.left().get(), "Advertencia", JOptionPane.ERROR_MESSAGE);
+        }
+        employeeTable.setVisible(true);
     }
     
     private void registerCategoryPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerCategoryPanelComponentShown
@@ -666,6 +1098,170 @@ public class MainScreen extends javax.swing.JFrame {
         this.loadSupplierTable();
     }//GEN-LAST:event_registerSupplierPanelComponentShown
 
+    private void productTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productTableMouseClicked
+        if (evt.getClickCount() == 1) {
+            productEditButton.setEnabled(true);
+            productDeleteButton.setEnabled(true);
+        }
+    }//GEN-LAST:event_productTableMouseClicked
+
+    private void productAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productAddButtonActionPerformed
+        // TODO add your handling code here:
+        AddProductSreen screen = new AddProductSreen();
+        screen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadProductTable();
+                productEditButton.setEnabled(false);
+                productDeleteButton.setEnabled(false);
+            }
+        });
+        screen.pack();
+        screen.setResizable(false);
+        screen.setLocationRelativeTo(null);
+        screen.setVisible(true);
+    }//GEN-LAST:event_productAddButtonActionPerformed
+
+    private void productEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productEditButtonActionPerformed
+        ProductModel product = new ProductModel();
+        int selectedRow = productTable.getSelectedRow();
+        product = products.get(selectedRow);
+        EditProductSreen screen = new EditProductSreen(product);
+        screen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadProductTable();
+                productEditButton.setEnabled(false);
+                productDeleteButton.setEnabled(false);
+            }
+        });
+        screen.pack();
+        screen.setResizable(false);
+        screen.setLocationRelativeTo(null);
+        screen.setVisible(true);
+    }//GEN-LAST:event_productEditButtonActionPerformed
+
+    private void productDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productDeleteButtonActionPerformed
+        // TODO add your handling code here:
+        int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar este pruducto?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (option == JOptionPane.YES_OPTION) {
+            int selectedRow = productTable.getSelectedRow();
+            String id = productTable.getValueAt(selectedRow, 0).toString();
+            Either<String, String> response = new ProductController().onDelete(id);
+            if (response.isRight()) {
+                JOptionPane.showMessageDialog(null, response.right().get());
+                this.loadProductTable();
+            } else {
+                JOptionPane.showMessageDialog(null, response.left().get());
+            }
+        }
+        productEditButton.setEnabled(false);
+        productDeleteButton.setEnabled(false);
+    }//GEN-LAST:event_productDeleteButtonActionPerformed
+
+    private void registerProductoPanelComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerProductoPanelComponentHidden
+        productEditButton.setEnabled(false);
+        productDeleteButton.setEnabled(false);
+    }//GEN-LAST:event_registerProductoPanelComponentHidden
+
+    private void registerProductoPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerProductoPanelComponentShown
+        // TODO add your handling code here:
+        this.loadProductTable();
+    }//GEN-LAST:event_registerProductoPanelComponentShown
+
+    private void closeSessionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeSessionButtonActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_closeSessionButtonActionPerformed
+
+    private void employeeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeeTableMouseClicked
+        if (evt.getClickCount() == 1) {
+            employeeEditButton.setEnabled(true);
+            employeeDeleteButton.setEnabled(true);
+        }
+    }//GEN-LAST:event_employeeTableMouseClicked
+
+    private void employeeAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeAddButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_employeeAddButtonActionPerformed
+
+    private void employeeEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeEditButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_employeeEditButtonActionPerformed
+
+    private void employeeDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeDeleteButtonActionPerformed
+        int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar este empleado?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (option == JOptionPane.YES_OPTION) {
+            int selectedRow = employeeTable.getSelectedRow();
+            String id = employeeTable.getValueAt(selectedRow, 0).toString();
+            Either<String, String> response = new EmployeeController().onDelete(id);
+            if (response.isRight()) {
+                JOptionPane.showMessageDialog(null, response.right().get());
+                this.loadProductTable();
+            } else {
+                JOptionPane.showMessageDialog(null, response.left().get());
+            }
+        }
+        employeeEditButton.setEnabled(false);
+        employeeDeleteButton.setEnabled(false);
+    }//GEN-LAST:event_employeeDeleteButtonActionPerformed
+
+    private void registerEmployeePanelComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerEmployeePanelComponentHidden
+        employeeEditButton.setEnabled(false);
+        employeeDeleteButton.setEnabled(false);
+    }//GEN-LAST:event_registerEmployeePanelComponentHidden
+
+    private void registerEmployeePanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerEmployeePanelComponentShown
+        this.loadEmployeeTable();
+    }//GEN-LAST:event_registerEmployeePanelComponentShown
+
+    private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userTableMouseClicked
+
+    private void userAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userAddButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userAddButtonActionPerformed
+
+    private void userEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userEditButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userEditButtonActionPerformed
+
+    private void userDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userDeleteButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_userDeleteButtonActionPerformed
+
+    private void registerUserPanelComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerUserPanelComponentHidden
+        // TODO add your handling code here:
+    }//GEN-LAST:event_registerUserPanelComponentHidden
+
+    private void registerUserPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerUserPanelComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_registerUserPanelComponentShown
+
+    private void registerEmployeePanel1ComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerEmployeePanel1ComponentHidden
+        // TODO add your handling code here:
+    }//GEN-LAST:event_registerEmployeePanel1ComponentHidden
+
+    private void registerEmployeePanel1ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerEmployeePanel1ComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_registerEmployeePanel1ComponentShown
+
+    private void registerUserPanel1ComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerUserPanel1ComponentHidden
+        // TODO add your handling code here:
+    }//GEN-LAST:event_registerUserPanel1ComponentHidden
+
+    private void registerUserPanel1ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerUserPanel1ComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_registerUserPanel1ComponentShown
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       new ReportsController().generateProductsReport();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        new ReportsController().generateSupplierReport();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -699,33 +1295,54 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton categoryDeleteButton;
     private javax.swing.JButton categoryEditButton;
     private javax.swing.JTable categoryTable;
+    private javax.swing.JButton closeSessionButton;
     private javax.swing.JPanel configurationPanel;
     private javax.swing.JPanel controlPanel;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton employeeAddButton;
+    private javax.swing.JButton employeeDeleteButton;
+    private javax.swing.JButton employeeEditButton;
+    private javax.swing.JTable employeeTable;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane4;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTabbedPane mainMenu;
     private javax.swing.JPanel peoplePanel;
-    private javax.swing.JPanel peoplePanel1;
-    private javax.swing.JPanel peoplePanel4;
-    private javax.swing.JPanel peoplePanel5;
     private javax.swing.JPanel peoplePanel6;
     private javax.swing.JPanel peoplePanel7;
+    private javax.swing.JTabbedPane peopleTabbedPane;
+    private javax.swing.JTabbedPane peopleTabbedPane1;
+    private javax.swing.JButton productAddButton;
+    private javax.swing.JButton productDeleteButton;
+    private javax.swing.JButton productEditButton;
+    private javax.swing.JTabbedPane productTabbedPane;
+    private javax.swing.JTable productTable;
     private javax.swing.JPanel productsPanel;
     private javax.swing.JPanel registerCategoryPanel;
+    private javax.swing.JPanel registerEmployeePanel;
+    private javax.swing.JPanel registerEmployeePanel1;
+    private javax.swing.JPanel registerProductoPanel;
     private javax.swing.JPanel registerSupplierPanel;
+    private javax.swing.JPanel registerUserPanel;
+    private javax.swing.JPanel registerUserPanel1;
     private javax.swing.JPanel reportsPanel;
     private javax.swing.JButton supplierAddButton;
     private javax.swing.JButton supplierDeleteButton;
     private javax.swing.JButton supplierEditButton;
     private javax.swing.JTable supplierTable;
+    private javax.swing.JButton userAddButton;
+    private javax.swing.JButton userDeleteButton;
+    private javax.swing.JButton userEditButton;
+    private javax.swing.JTable userTable;
     // End of variables declaration//GEN-END:variables
 }

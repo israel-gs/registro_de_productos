@@ -7,6 +7,16 @@ public class SupplierModel {
     private String ruc;
     private String phone;
 
+    public SupplierModel() {
+    }
+
+    public SupplierModel(String id, String name, String ruc, String phone) {
+        this.id = id;
+        this.name = name;
+        this.ruc = ruc;
+        this.phone = phone;
+    }
+
     public String getID() {
         return id;
     }
@@ -37,5 +47,10 @@ public class SupplierModel {
 
     public void setPhone(String value) {
         this.phone = value;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

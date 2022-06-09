@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="lib" path="target/registro_de_productos-1.0-SNAPSHOT-javadoc.jar"/>
+	<classpathentry kind="lib" path="target/registro_de_productos-1.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="target/registro_de_productos-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="src" path="target/generated-sources/annotations">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
