@@ -1,5 +1,6 @@
 package com.utp.registro_de_productos.provider;
 
+import com.utp.registro_de_productos.core.MySqlConnection;
 import com.utp.registro_de_productos.core.Query;
 import com.utp.registro_de_productos.model.EmployeeModel;
 
@@ -26,7 +27,7 @@ public class EmployeeProvider {
                     + "hasChildren,"
                     + "childrensNumber,"
                     + "maritalStatus "
-                    + "from employee; ");
+                    + "from employee;");
             while (rs.next()) {
                 EmployeeModel employeeModel = new EmployeeModel();
                 employeeModel.setId(rs.getString("id"));
@@ -52,7 +53,7 @@ public class EmployeeProvider {
     public Either<String, String> insertEmployee(EmployeeModel employee) {
         try {
             int result = query.update(""
-                    + "INSERT INTO registro_de_productos.employee (id, name, lastname, documentType, documentNumber, code, hasExperience, birthday, hasChildren, childrensNumber, maritalStatus) VALUES"
+                    + "INSERT INTO employee (id, name, lastname, documentType, documentNumber, code, hasExperience, birthday, hasChildren, childrensNumber, maritalStatus) VALUES"
                     + "('" + employee.getId() + "', '" + employee.getName() + "', '" + employee.getLastname() + "', '" + employee.getDocumentType() + "', '" + employee.getDocumentNumber() + "', '" + employee.getCode() + "', '" + employee.getHasExperience() + "', '" + employee.getBirthday() + "', '" + employee.getHasChildren() + "', '" + employee.getChildrensNumber() + "', '" + employee.getMaritalStatus() + "');");
             return switch (result) {
                 case 1 ->
@@ -71,7 +72,7 @@ public class EmployeeProvider {
     public Either<String, String> updateEmployee(EmployeeModel employee) {
         try {
             int result = query.update(""
-                    + "UPDATE registro_de_productos.employee t SET"
+                    + "UPDATE employee t SET"
                     + " t.name = '" + employee.getName() + "',"
                     + " t.lastname = '" + employee.getLastname() + "',"
                     + " t.documentType = '" + employee.getDocumentType() + "',"
@@ -99,7 +100,7 @@ public class EmployeeProvider {
 
     public Either<String, String> deleteEmployee(String id) {
         try {
-            int result = query.update("DELETE FROM registro_de_productos.employee WHERE id LIKE '" + id + "';");
+            int result = query.update("DELETE FROM employee WHERE id LIKE '" + id + "';");
             return switch (result) {
                 case 1 ->
                     Either.right("El empleado se eliminó correctamente");

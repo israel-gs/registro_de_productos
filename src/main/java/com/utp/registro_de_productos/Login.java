@@ -165,7 +165,7 @@ public class Login extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            UIManager.setLookAndFeel( new FlatLightLaf() );
+            UIManager.setLookAndFeel(new FlatLightLaf());
         } catch( Exception ex ) {
             System.err.println( "Failed to initialize LaF" );
         }

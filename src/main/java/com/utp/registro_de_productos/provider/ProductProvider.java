@@ -1,5 +1,6 @@
 package com.utp.registro_de_productos.provider;
 
+import com.utp.registro_de_productos.core.MySqlConnection;
 import com.utp.registro_de_productos.core.Query;
 import com.utp.registro_de_productos.model.CategoryModel;
 import com.utp.registro_de_productos.model.ProductModel;
@@ -51,7 +52,7 @@ public class ProductProvider {
 
     public Either<String, String> insertProduct(ProductModel product) {
         try {
-            int result = query.update("INSERT INTO registro_de_productos.product (id, name, description, price, quantity, categoryId, supplierId) VALUES ('" + product.getId() + "', '" + product.getName() + "', '" + product.getDescription() + "', '" + product.getPrice() + "', '" + product.getQuantity() + "', '" + product.getCategory().getID() + "', '" + product.getSupplier().getID() + "');");
+            int result = query.update("INSERT INTO product (id, name, description, price, quantity, categoryId, supplierId) VALUES ('" + product.getId() + "', '" + product.getName() + "', '" + product.getDescription() + "', '" + product.getPrice() + "', '" + product.getQuantity() + "', '" + product.getCategory().getID() + "', '" + product.getSupplier().getID() + "');");
             return switch (result) {
                 case 1 ->
                     Either.right("El producto se registró correctamente");
@@ -68,7 +69,7 @@ public class ProductProvider {
 
     public Either<String, String> updateProduct(ProductModel product) {
         try {
-            int result = query.update("UPDATE registro_de_productos.product t "
+            int result = query.update("UPDATE product t "
                     + "SET "
                     + "t.name = '" + product.getName() + "', "
                     + "t.description = '" + product.getDescription() + "', "
@@ -93,7 +94,7 @@ public class ProductProvider {
 
     public Either<String, String> deleteProduct(String id) {
         try {
-            int result = query.update("DELETE FROM registro_de_productos.product WHERE id LIKE '" + id + "';");
+            int result = query.update("DELETE FROM product WHERE id LIKE '" + id + "';");
             return switch (result) {
                 case 1 ->
                     Either.right("El producto se eliminó correctamente");

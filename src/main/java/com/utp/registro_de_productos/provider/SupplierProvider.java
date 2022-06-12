@@ -1,5 +1,6 @@
 package com.utp.registro_de_productos.provider;
 
+import com.utp.registro_de_productos.core.MySqlConnection;
 import com.utp.registro_de_productos.core.Query;
 import com.utp.registro_de_productos.model.SupplierModel;
 import io.vavr.control.Either;
@@ -19,7 +20,7 @@ public class SupplierProvider {
                     + "       ruc,"
                     + "       phone "
                     + "from "
-                    + "    registro_de_productos.supplier;");
+                    + "    supplier;");
             while (rs.next()) {
                 SupplierModel supplierModel = new SupplierModel();
                 supplierModel.setID(rs.getString("id"));
@@ -37,7 +38,7 @@ public class SupplierProvider {
 
     public Either<String, String> insertSupplier(SupplierModel supplier) {
         try {
-            int result = query.update("INSERT INTO registro_de_productos.supplier (id, name, ruc, phone) VALUES ('" + supplier.getID() + "', '" + supplier.getName() + "', '" + supplier.getRuc()+ "', '" + supplier.getPhone()+ "');");
+            int result = query.update("INSERT INTO supplier (id, name, ruc, phone) VALUES ('" + supplier.getID() + "', '" + supplier.getName() + "', '" + supplier.getRuc()+ "', '" + supplier.getPhone()+ "');");
             return switch (result) {
                 case 1 ->
                     Either.right("El proveedor se registró correctamente");
@@ -54,7 +55,7 @@ public class SupplierProvider {
 
     public Either<String, String> updateSupplier(SupplierModel supplier) {
         try {
-            int result = query.update("UPDATE registro_de_productos.supplier t SET t.name = '" + supplier.getName() + "', t.ruc = '" + supplier.getRuc()+ "', t.phone = '" + supplier.getPhone()+ "' WHERE t.id LIKE '" + supplier.getID() + "';");
+            int result = query.update("UPDATE supplier t SET t.name = '" + supplier.getName() + "', t.ruc = '" + supplier.getRuc()+ "', t.phone = '" + supplier.getPhone()+ "' WHERE t.id LIKE '" + supplier.getID() + "';");
             return switch (result) {
                 case 1 ->
                     Either.right("El proveedor se actualizó correctamente");
@@ -71,7 +72,7 @@ public class SupplierProvider {
 
     public Either<String, String> deleteSupplier(String id) {
         try {
-            int result = query.update("DELETE FROM registro_de_productos.supplier WHERE id LIKE '" + id + "';");
+            int result = query.update("DELETE FROM supplier WHERE id LIKE '" + id + "';");
             return switch (result) {
                 case 1 ->
                     Either.right("El proveedor se eliminó correctamente");

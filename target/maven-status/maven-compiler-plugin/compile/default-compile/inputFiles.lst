@@ -2,10 +2,12 @@
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/AddCategorySreen.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/EditSupplierSreen.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/provider/SupplierProvider.java
+/Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/core/TextPrompt.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/controller/ReportsController.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/model/SupplierModel.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/provider/CategoryProvider.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/EditCategorySreen.java
+/Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/AddEmployeeSreen.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/MainScreen.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/model/UserModel.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/controller/CategoryController.java

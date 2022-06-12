@@ -19,7 +19,7 @@ public class LoginProvider {
                     + "       username, "
                     + "       isAdmin "
                     + "from "
-                    + "    registro_de_productos.user "
+                    + "    user "
                     + "where "
                     + "    dni = '" + username + "';");
             String message = "El usuario no existe";

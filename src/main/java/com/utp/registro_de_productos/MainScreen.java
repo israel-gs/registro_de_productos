@@ -97,11 +97,11 @@ public class MainScreen extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         registerUserPanel1 = new javax.swing.JPanel();
-        configurationPanel = new javax.swing.JPanel();
         controlPanel = new javax.swing.JPanel();
         jTabbedPane4 = new javax.swing.JTabbedPane();
         peoplePanel6 = new javax.swing.JPanel();
         peoplePanel7 = new javax.swing.JPanel();
+        configurationPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -118,6 +118,12 @@ public class MainScreen extends javax.swing.JFrame {
         });
 
         mainMenu.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+
+        productTabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                productTabbedPaneStateChanged(evt);
+            }
+        });
 
         registerProductoPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
@@ -233,6 +239,11 @@ public class MainScreen extends javax.swing.JFrame {
 
         productTabbedPane.addTab("Registro de productos", registerProductoPanel);
 
+        registerCategoryPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                registerCategoryPanelMouseClicked(evt);
+            }
+        });
         registerCategoryPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
                 registerCategoryPanelComponentHidden(evt);
@@ -271,6 +282,11 @@ public class MainScreen extends javax.swing.JFrame {
         categoryTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 categoryTableMouseClicked(evt);
+            }
+        });
+        categoryTable.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                categoryTableComponentShown(evt);
             }
         });
         jScrollPane2.setViewportView(categoryTable);
@@ -809,19 +825,6 @@ public class MainScreen extends javax.swing.JFrame {
 
         mainMenu.addTab("Reportes", new javax.swing.ImageIcon(getClass().getResource("/file-download.png")), reportsPanel); // NOI18N
 
-        javax.swing.GroupLayout configurationPanelLayout = new javax.swing.GroupLayout(configurationPanel);
-        configurationPanel.setLayout(configurationPanelLayout);
-        configurationPanelLayout.setHorizontalGroup(
-            configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 706, Short.MAX_VALUE)
-        );
-        configurationPanelLayout.setVerticalGroup(
-            configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 356, Short.MAX_VALUE)
-        );
-
-        mainMenu.addTab("Configuración", new javax.swing.ImageIcon(getClass().getResource("/wrench.png")), configurationPanel); // NOI18N
-
         javax.swing.GroupLayout peoplePanel6Layout = new javax.swing.GroupLayout(peoplePanel6);
         peoplePanel6.setLayout(peoplePanel6Layout);
         peoplePanel6Layout.setHorizontalGroup(
@@ -863,17 +866,30 @@ public class MainScreen extends javax.swing.JFrame {
 
         mainMenu.addTab("Control", new javax.swing.ImageIcon(getClass().getResource("/user-check.png")), controlPanel); // NOI18N
 
+        javax.swing.GroupLayout configurationPanelLayout = new javax.swing.GroupLayout(configurationPanel);
+        configurationPanel.setLayout(configurationPanelLayout);
+        configurationPanelLayout.setHorizontalGroup(
+            configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 706, Short.MAX_VALUE)
+        );
+        configurationPanelLayout.setVerticalGroup(
+            configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 356, Short.MAX_VALUE)
+        );
+
+        mainMenu.addTab("Configuración", new javax.swing.ImageIcon(getClass().getResource("/wrench.png")), configurationPanel); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(mainMenu))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(closeSessionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -883,7 +899,7 @@ public class MainScreen extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
@@ -929,11 +945,11 @@ public class MainScreen extends javax.swing.JFrame {
         Either<String, TableModel> response = new ProductController().onLoad();
         if (response.isRight()) {
             productTable.setModel(response.right().get());
+            productTable.setVisible(true);
         }
         if (response.isLeft()) {
             JOptionPane.showMessageDialog(null, response.left().get(), "Advertencia", JOptionPane.ERROR_MESSAGE);
         }
-        productTable.setVisible(true);
     }
 
     private void loadEmployeeTable() {
@@ -960,7 +976,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_categoryTableMouseClicked
 
     private void categoryDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryDeleteButtonActionPerformed
-        // TODO add your handling code here:
         int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar esta categoría?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (option == JOptionPane.YES_OPTION) {
             int selectedRow = categoryTable.getSelectedRow();
@@ -978,13 +993,11 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_categoryDeleteButtonActionPerformed
 
     private void registerCategoryPanelComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerCategoryPanelComponentHidden
-        // TODO add your handling code here:
         categoryEditButton.setEnabled(false);
         categoryDeleteButton.setEnabled(false);
     }//GEN-LAST:event_registerCategoryPanelComponentHidden
 
     private void categoryEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryEditButtonActionPerformed
-        // TODO add your handling code here:
         CategoryModel categoryModel = new CategoryModel();
         int selectedRow = categoryTable.getSelectedRow();
         categoryModel.setID(categoryTable.getValueAt(selectedRow, 0).toString());
@@ -1022,7 +1035,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_categoryAddButtonActionPerformed
 
     private void supplierTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierTableMouseClicked
-        // TODO add your handling code here:
         if (evt.getClickCount() == 1) {
             supplierEditButton.setEnabled(true);
             supplierDeleteButton.setEnabled(true);
@@ -1030,7 +1042,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_supplierTableMouseClicked
 
     private void supplierAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierAddButtonActionPerformed
-        // TODO add your handling code here:
         AddSupplierSreen addSupplierSreen = new AddSupplierSreen();
         addSupplierSreen.addWindowListener(new WindowAdapter() {
             @Override
@@ -1047,7 +1058,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_supplierAddButtonActionPerformed
 
     private void supplierEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierEditButtonActionPerformed
-        // TODO add your handling code here:
         SupplierModel supplierModel = new SupplierModel();
         int selectedRow = supplierTable.getSelectedRow();
         supplierModel.setID(supplierTable.getValueAt(selectedRow, 0).toString());
@@ -1070,7 +1080,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_supplierEditButtonActionPerformed
 
     private void supplierDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierDeleteButtonActionPerformed
-        // TODO add your handling code here:
         int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar este proveedor?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (option == JOptionPane.YES_OPTION) {
             int selectedRow = supplierTable.getSelectedRow();
@@ -1088,13 +1097,11 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_supplierDeleteButtonActionPerformed
 
     private void registerSupplierPanelComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerSupplierPanelComponentHidden
-        // TODO add your handling code here:
         supplierEditButton.setEnabled(false);
         supplierDeleteButton.setEnabled(false);
     }//GEN-LAST:event_registerSupplierPanelComponentHidden
 
     private void registerSupplierPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerSupplierPanelComponentShown
-        // TODO add your handling code here:
         this.loadSupplierTable();
     }//GEN-LAST:event_registerSupplierPanelComponentShown
 
@@ -1106,7 +1113,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_productTableMouseClicked
 
     private void productAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productAddButtonActionPerformed
-        // TODO add your handling code here:
         AddProductSreen screen = new AddProductSreen();
         screen.addWindowListener(new WindowAdapter() {
             @Override
@@ -1142,7 +1148,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_productEditButtonActionPerformed
 
     private void productDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productDeleteButtonActionPerformed
-        // TODO add your handling code here:
         int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar este pruducto?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (option == JOptionPane.YES_OPTION) {
             int selectedRow = productTable.getSelectedRow();
@@ -1165,7 +1170,6 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_registerProductoPanelComponentHidden
 
     private void registerProductoPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerProductoPanelComponentShown
-        // TODO add your handling code here:
         this.loadProductTable();
     }//GEN-LAST:event_registerProductoPanelComponentShown
 
@@ -1181,7 +1185,19 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_employeeTableMouseClicked
 
     private void employeeAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeAddButtonActionPerformed
-        // TODO add your handling code here:
+       AddEmployeeSreen screen = new AddEmployeeSreen();
+        screen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadEmployeeTable();
+                employeeEditButton.setEnabled(false);
+                employeeDeleteButton.setEnabled(false);
+            }
+        });
+        screen.pack();
+        screen.setResizable(false);
+        screen.setLocationRelativeTo(null);
+        screen.setVisible(true);
     }//GEN-LAST:event_employeeAddButtonActionPerformed
 
     private void employeeEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeEditButtonActionPerformed
@@ -1261,6 +1277,19 @@ public class MainScreen extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         new ReportsController().generateSupplierReport();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void categoryTableComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_categoryTableComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_categoryTableComponentShown
+
+    private void registerCategoryPanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerCategoryPanelMouseClicked
+
+    }//GEN-LAST:event_registerCategoryPanelMouseClicked
+
+    private void productTabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_productTabbedPaneStateChanged
+        int tabIndex = productTabbedPane.getSelectedIndex();
+        System.out.println(tabIndex);
+    }//GEN-LAST:event_productTabbedPaneStateChanged
 
     /**
      * @param args the command line arguments

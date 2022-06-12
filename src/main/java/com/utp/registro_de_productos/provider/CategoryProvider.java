@@ -1,5 +1,6 @@
 package com.utp.registro_de_productos.provider;
 
+import com.utp.registro_de_productos.core.MySqlConnection;
 import com.utp.registro_de_productos.core.Query;
 import com.utp.registro_de_productos.model.CategoryModel;
 import io.vavr.control.Either;
@@ -18,7 +19,7 @@ public class CategoryProvider {
                     + "       name, "
                     + "       description "
                     + "from "
-                    + "    registro_de_productos.category;");
+                    + "    category;");
             while (rs.next()) {
                 CategoryModel categoryModel = new CategoryModel();
                 categoryModel.setID(rs.getString("id"));
@@ -35,7 +36,7 @@ public class CategoryProvider {
 
     public Either<String, String> insertCategory(CategoryModel category) {
         try {
-            int result = query.update("INSERT INTO registro_de_productos.category (id, name, description) VALUES ('" + category.getID() + "', '" + category.getName() + "', '" + category.getDescription() + "');");
+            int result = query.update("INSERT INTO category (id, name, description) VALUES ('" + category.getID() + "', '" + category.getName() + "', '" + category.getDescription() + "');");
             return switch (result) {
                 case 1 ->
                     Either.right("La categoría se registró correctamente");
@@ -52,7 +53,7 @@ public class CategoryProvider {
 
     public Either<String, String> updateCategory(CategoryModel category) {
         try {
-            int result = query.update("UPDATE registro_de_productos.category t SET t.name = '" + category.getName() + "', t.description = '" + category.getDescription() + "' WHERE t.id LIKE '" + category.getID() + "';");
+            int result = query.update("UPDATE category t SET t.name = '" + category.getName() + "', t.description = '" + category.getDescription() + "' WHERE t.id LIKE '" + category.getID() + "';");
             return switch (result) {
                 case 1 ->
                     Either.right("La categoría se actualizó correctamente");
@@ -69,7 +70,7 @@ public class CategoryProvider {
 
     public Either<String, String> deleteCategory(String id) {
         try {
-            int result = query.update("DELETE FROM registro_de_productos.category WHERE id LIKE '" + id + "';");
+            int result = query.update("DELETE FROM category WHERE id LIKE '" + id + "';");
             return switch (result) {
                 case 1 ->
                     Either.right("La categoría se eliminó correctamente");
