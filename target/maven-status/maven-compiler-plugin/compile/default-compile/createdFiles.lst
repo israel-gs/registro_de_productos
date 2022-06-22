@@ -7,10 +7,13 @@ com/utp/registro_de_productos/MainScreen$32.class
 com/utp/registro_de_productos/MainScreen$22.class
 com/utp/registro_de_productos/MainScreen$42.class
 com/utp/registro_de_productos/EditSupplierSreen$1.class
+com/utp/registro_de_productos/AddUserScreen$3.class
 com/utp/registro_de_productos/EditEmployeeSreen$6.class
 com/utp/registro_de_productos/controller/LoginController.class
+com/utp/registro_de_productos/EditUserScreen$1.class
 com/utp/registro_de_productos/provider/LoginProvider.class
 com/utp/registro_de_productos/EditCategorySreen.class
+com/utp/registro_de_productos/EditUserScreen.class
 com/utp/registro_de_productos/AddEmployeeSreen$3.class
 com/utp/registro_de_productos/MainScreen$15.class
 com/utp/registro_de_productos/AddCategorySreen$2.class
@@ -26,6 +29,7 @@ com/utp/registro_de_productos/MainScreen$2.class
 com/utp/registro_de_productos/MainScreen$5.class
 com/utp/registro_de_productos/EditProductSreen$1.class
 com/utp/registro_de_productos/MainScreen$44.class
+com/utp/registro_de_productos/EditUserScreen$3.class
 com/utp/registro_de_productos/MainScreen$3.class
 com/utp/registro_de_productos/MainScreen.class
 com/utp/registro_de_productos/EditEmployeeSreen.class
@@ -46,8 +50,11 @@ com/utp/registro_de_productos/EditEmployeeSreen$4.class
 com/utp/registro_de_productos/model/ProductModel.class
 com/utp/registro_de_productos/MainScreen$17.class
 com/utp/registro_de_productos/AddEmployeeSreen$5.class
+com/utp/registro_de_productos/provider/UserProvider.class
+com/utp/registro_de_productos/EditUserScreen$4.class
 com/utp/registro_de_productos/MainScreen$28.class
 com/utp/registro_de_productos/AddSupplierSreen$1.class
+com/utp/registro_de_productos/AddUserScreen$4.class
 com/utp/registro_de_productos/EditCategorySreen$3.class
 com/utp/registro_de_productos/EditSupplierSreen.class
 com/utp/registro_de_productos/provider/SupplierProvider.class
@@ -64,6 +71,7 @@ com/utp/registro_de_productos/MainScreen$1.class
 com/utp/registro_de_productos/AddSupplierSreen$2.class
 com/utp/registro_de_productos/AddProductSreen.class
 com/utp/registro_de_productos/MainScreen$39.class
+com/utp/registro_de_productos/MainScreen$49.class
 com/utp/registro_de_productos/MainScreen$29.class
 com/utp/registro_de_productos/MainScreen$19.class
 com/utp/registro_de_productos/EditCategorySreen$1.class
@@ -83,9 +91,12 @@ com/utp/registro_de_productos/EditSupplierSreen$2.class
 com/utp/registro_de_productos/EditEmployeeSreen$5.class
 com/utp/registro_de_productos/MainScreen$40.class
 com/utp/registro_de_productos/MainScreen$20.class
+com/utp/registro_de_productos/EditUserScreen$2.class
 com/utp/registro_de_productos/AddCategorySreen$1.class
 com/utp/registro_de_productos/controller/EmployeeController.class
 com/utp/registro_de_productos/controller/ProductController.class
+com/utp/registro_de_productos/AddUserScreen$2.class
+com/utp/registro_de_productos/AddUserScreen.class
 com/utp/registro_de_productos/EditSupplierSreen$3.class
 com/utp/registro_de_productos/controller/SupplierController.class
 com/utp/registro_de_productos/core/TextPrompt$Show.class
@@ -101,9 +112,12 @@ com/utp/registro_de_productos/MainScreen$6.class
 com/utp/registro_de_productos/MainScreen$24.class
 com/utp/registro_de_productos/EditEmployeeSreen$1.class
 com/utp/registro_de_productos/MainScreen$25.class
+com/utp/registro_de_productos/AddUserScreen$1.class
+com/utp/registro_de_productos/controller/UserController.class
 com/utp/registro_de_productos/MainScreen$7.class
 com/utp/registro_de_productos/MainScreen$13.class
 com/utp/registro_de_productos/AddEmployeeSreen$1.class
 com/utp/registro_de_productos/MainScreen$30.class
+com/utp/registro_de_productos/MainScreen$48.class
 com/utp/registro_de_productos/Login$1.class
 com/utp/registro_de_productos/AddProductSreen$2.class

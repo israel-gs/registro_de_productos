@@ -20,7 +20,9 @@ import javax.swing.UIManager;
  * @author israelgutierrez
  */
 public class Login extends javax.swing.JFrame {
+
     boolean connectionSuccess;
+
     /**
      * Creates new form Login
      */
@@ -54,6 +56,7 @@ public class Login extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         lblConnectionStatus = new javax.swing.JLabel();
         txtPassword = new javax.swing.JPasswordField();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -78,26 +81,27 @@ public class Login extends javax.swing.JFrame {
 
         lblConnectionStatus.setText("-");
 
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mancha.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblConnectionStatus)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblConnectionStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
                     .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                     .addComponent(txtPassword))
-                .addContainerGap(263, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(jLabel5))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,11 +118,12 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(lblConnectionStatus))
                 .addContainerGap())
+            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -138,16 +143,11 @@ public class Login extends javax.swing.JFrame {
             // isLeft get String (error message) 
             if (userResponse.isRight()) {
                 UserModel user = userResponse.right().get();
-                if (user.getIsAdmin()) {
-                    MainScreen mainScreen = new MainScreen(user);
-                    mainScreen.setResizable(false);
-                    mainScreen.setLocationRelativeTo(null);
-                    mainScreen.setVisible(true);
-                    this.dispose();
-                    System.out.println("Es admin");
-                } else {
-                    System.out.println("No es admin");
-                }
+                MainScreen mainScreen = new MainScreen(user);
+                mainScreen.setResizable(false);
+                mainScreen.setLocationRelativeTo(null);
+                mainScreen.setVisible(true);
+                this.dispose();
             }
             if (userResponse.isLeft()) {
                 JOptionPane.showMessageDialog(null, userResponse.left().get());
@@ -166,11 +166,11 @@ public class Login extends javax.swing.JFrame {
          */
         try {
             UIManager.setLookAndFeel(new FlatLightLaf());
-        } catch( Exception ex ) {
-            System.err.println( "Failed to initialize LaF" );
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -189,6 +189,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel lblConnectionStatus;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;

@@ -8,6 +8,7 @@
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/provider/CategoryProvider.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/EditCategorySreen.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/AddEmployeeSreen.java
+/Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/AddUserScreen.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/MainScreen.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/model/UserModel.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/controller/CategoryController.java
@@ -19,10 +20,13 @@
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/model/ProductModel.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/Login.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/core/Query.java
+/Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/provider/UserProvider.java
+/Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/controller/UserController.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/provider/EmployeeProvider.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/controller/ProductController.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/AddProductSreen.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/provider/LoginProvider.java
+/Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/EditUserScreen.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/controller/LoginController.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/controller/SupplierController.java
 /Users/israelgutierrez/NetBeansProjects/registro_de_productos/src/main/java/com/utp/registro_de_productos/AddSupplierSreen.java

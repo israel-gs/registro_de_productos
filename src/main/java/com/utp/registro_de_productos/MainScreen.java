@@ -47,6 +47,11 @@ public class MainScreen extends javax.swing.JFrame {
     public MainScreen(UserModel user) {
         initComponents();
         this.user = user;
+        roleLabel.setText(user.getIsAdmin() ? "Administrador" : "Colaborador");
+        if (!user.getIsAdmin()) {
+            mainMenu.removeTabAt(0);
+            mainMenu.removeTabAt(0);
+        }
     }
 
     /**
@@ -110,7 +115,9 @@ public class MainScreen extends javax.swing.JFrame {
         jTabbedPane4 = new javax.swing.JTabbedPane();
         peoplePanel6 = new javax.swing.JPanel();
         peoplePanel7 = new javax.swing.JPanel();
-        configurationPanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        roleLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -234,7 +241,7 @@ public class MainScreen extends javax.swing.JFrame {
         registerProductoPanel.setLayout(registerProductoPanelLayout);
         registerProductoPanelLayout.setHorizontalGroup(
             registerProductoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         registerProductoPanelLayout.setVerticalGroup(
@@ -358,7 +365,7 @@ public class MainScreen extends javax.swing.JFrame {
         registerCategoryPanel.setLayout(registerCategoryPanelLayout);
         registerCategoryPanelLayout.setHorizontalGroup(
             registerCategoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         registerCategoryPanelLayout.setVerticalGroup(
@@ -472,7 +479,7 @@ public class MainScreen extends javax.swing.JFrame {
         registerSupplierPanel.setLayout(registerSupplierPanelLayout);
         registerSupplierPanelLayout.setHorizontalGroup(
             registerSupplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         registerSupplierPanelLayout.setVerticalGroup(
@@ -603,7 +610,7 @@ public class MainScreen extends javax.swing.JFrame {
         registerEmployeePanel.setLayout(registerEmployeePanelLayout);
         registerEmployeePanelLayout.setHorizontalGroup(
             registerEmployeePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         registerEmployeePanelLayout.setVerticalGroup(
@@ -717,7 +724,7 @@ public class MainScreen extends javax.swing.JFrame {
         registerUserPanel.setLayout(registerUserPanelLayout);
         registerUserPanelLayout.setHorizontalGroup(
             registerUserPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         registerUserPanelLayout.setVerticalGroup(
@@ -758,7 +765,7 @@ public class MainScreen extends javax.swing.JFrame {
         });
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/file-pdf.png"))); // NOI18N
-        jButton1.setText("Generar Reporte de Productos (.pdf)");
+        jButton1.setText("Generar Reporte de Productos ( .pdf)");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -766,7 +773,7 @@ public class MainScreen extends javax.swing.JFrame {
         });
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/file-pdf.png"))); // NOI18N
-        jButton2.setText("Generar Reporte de Proveedores (.pdf)");
+        jButton2.setText("Generar Reporte de Proveedores ( .pdf)");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -777,20 +784,17 @@ public class MainScreen extends javax.swing.JFrame {
         registerEmployeePanel1.setLayout(registerEmployeePanel1Layout);
         registerEmployeePanel1Layout.setHorizontalGroup(
             registerEmployeePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(registerEmployeePanel1Layout.createSequentialGroup()
-                .addGroup(registerEmployeePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 362, Short.MAX_VALUE))
+            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
         );
         registerEmployeePanel1Layout.setVerticalGroup(
             registerEmployeePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(registerEmployeePanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(203, Short.MAX_VALUE))
+                .addContainerGap(191, Short.MAX_VALUE))
         );
 
         peopleTabbedPane1.addTab("Reporte de productos", registerEmployeePanel1);
@@ -808,7 +812,7 @@ public class MainScreen extends javax.swing.JFrame {
         registerUserPanel1.setLayout(registerUserPanel1Layout);
         registerUserPanel1Layout.setHorizontalGroup(
             registerUserPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGap(0, 721, Short.MAX_VALUE)
         );
         registerUserPanel1Layout.setVerticalGroup(
             registerUserPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -838,7 +842,7 @@ public class MainScreen extends javax.swing.JFrame {
         peoplePanel6.setLayout(peoplePanel6Layout);
         peoplePanel6Layout.setHorizontalGroup(
             peoplePanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGap(0, 721, Short.MAX_VALUE)
         );
         peoplePanel6Layout.setVerticalGroup(
             peoplePanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -851,7 +855,7 @@ public class MainScreen extends javax.swing.JFrame {
         peoplePanel7.setLayout(peoplePanel7Layout);
         peoplePanel7Layout.setHorizontalGroup(
             peoplePanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGap(0, 721, Short.MAX_VALUE)
         );
         peoplePanel7Layout.setVerticalGroup(
             peoplePanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -875,18 +879,11 @@ public class MainScreen extends javax.swing.JFrame {
 
         mainMenu.addTab("Control", new javax.swing.ImageIcon(getClass().getResource("/user-check.png")), controlPanel); // NOI18N
 
-        javax.swing.GroupLayout configurationPanelLayout = new javax.swing.GroupLayout(configurationPanel);
-        configurationPanel.setLayout(configurationPanelLayout);
-        configurationPanelLayout.setHorizontalGroup(
-            configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 706, Short.MAX_VALUE)
-        );
-        configurationPanelLayout.setVerticalGroup(
-            configurationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 356, Short.MAX_VALUE)
-        );
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vaca.png"))); // NOI18N
 
-        mainMenu.addTab("Configuración", new javax.swing.ImageIcon(getClass().getResource("/wrench.png")), configurationPanel); // NOI18N
+        jLabel3.setText("Rol:");
+
+        roleLabel.setText("-");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -896,26 +893,38 @@ public class MainScreen extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(mainMenu))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(roleLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(closeSessionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(closeSessionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap()
+                        .addComponent(mainMenu))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(233, 233, 233)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(239, 239, 239))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel1)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(mainMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(closeSessionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(closeSessionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(roleLabel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -1413,7 +1422,6 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton categoryEditButton;
     private javax.swing.JTable categoryTable;
     private javax.swing.JButton closeSessionButton;
-    private javax.swing.JPanel configurationPanel;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JButton employeeAddButton;
     private javax.swing.JButton employeeDeleteButton;
@@ -1422,6 +1430,8 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1453,6 +1463,7 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JPanel registerUserPanel;
     private javax.swing.JPanel registerUserPanel1;
     private javax.swing.JPanel reportsPanel;
+    private javax.swing.JLabel roleLabel;
     private javax.swing.JButton supplierAddButton;
     private javax.swing.JButton supplierDeleteButton;
     private javax.swing.JButton supplierEditButton;
