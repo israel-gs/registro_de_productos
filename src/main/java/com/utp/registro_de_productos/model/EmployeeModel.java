@@ -120,5 +120,10 @@ public class EmployeeModel {
     public void setMaritalStatus(String maritalStatus) {
         this.maritalStatus = maritalStatus;
     }
+    
+    @Override
+    public String toString() {
+        return this.name + " " + this.lastname;
+    }
 
 }

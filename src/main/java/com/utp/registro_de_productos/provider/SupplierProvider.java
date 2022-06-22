@@ -1,6 +1,5 @@
 package com.utp.registro_de_productos.provider;
 
-import com.utp.registro_de_productos.core.MySqlConnection;
 import com.utp.registro_de_productos.core.Query;
 import com.utp.registro_de_productos.model.SupplierModel;
 import io.vavr.control.Either;

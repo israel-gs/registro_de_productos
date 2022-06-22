@@ -9,11 +9,11 @@ public class Query {
 
     public int update(String query, String metodo) throws Exception {
         int resp = 0;
+        System.out.println(metodo + "----->" + query);
         try {
             connection = MySqlConnection.createConnection();
             Statement st = connection.createStatement();
             resp = st.executeUpdate(query);
-            System.out.println(metodo + "----->" + query);
         } finally {
             connection.close();
         }

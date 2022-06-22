@@ -2,25 +2,34 @@ package com.utp.registro_de_productos.model;
 
 public class UserModel {
 
-    private String dni;
-    private String name;
+    private String id;
+    private EmployeeModel employee;
+    private String usermane;
     private String password;
     private boolean isAdmin;
 
-    public String getDni() {
-        return dni;
+    public String getId() {
+        return id;
     }
 
-    public void setDni(String value) {
-        this.dni = value;
+    public void setId(String value) {
+        this.id = value;
     }
 
-    public String getName() {
-        return name;
+    public EmployeeModel getEmployee() {
+        return employee;
     }
 
-    public void setName(String value) {
-        this.name = value;
+    public void setEmployee(EmployeeModel value) {
+        this.employee = value;
+    }
+    
+    public String getUsername() {
+        return usermane;
+    }
+
+    public void setUsername(String value) {
+        this.usermane = value;
     }
 
     public String getPassword() {

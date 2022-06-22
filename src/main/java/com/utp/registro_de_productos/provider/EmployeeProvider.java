@@ -6,6 +6,7 @@ import com.utp.registro_de_productos.model.EmployeeModel;
 
 import io.vavr.control.Either;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class EmployeeProvider {
@@ -52,9 +53,12 @@ public class EmployeeProvider {
 
     public Either<String, String> insertEmployee(EmployeeModel employee) {
         try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String formatedDate = formatter.format(employee.getBirthday());
+            System.out.println(formatedDate);
             int result = query.update(""
                     + "INSERT INTO employee (id, name, lastname, documentType, documentNumber, code, hasExperience, birthday, hasChildren, childrensNumber, maritalStatus) VALUES"
-                    + "('" + employee.getId() + "', '" + employee.getName() + "', '" + employee.getLastname() + "', '" + employee.getDocumentType() + "', '" + employee.getDocumentNumber() + "', '" + employee.getCode() + "', '" + employee.getHasExperience() + "', '" + employee.getBirthday() + "', '" + employee.getHasChildren() + "', '" + employee.getChildrensNumber() + "', '" + employee.getMaritalStatus() + "');");
+                    + "('" + employee.getId() + "', '" + employee.getName() + "', '" + employee.getLastname() + "', '" + employee.getDocumentType() + "', '" + employee.getDocumentNumber() + "', '" + employee.getCode() + "', '" + (employee.getHasExperience() ? 1 : 0) + "', '" + formatedDate + "', '" + (employee.getHasChildren() ? 1 : 0) + "', '" + employee.getChildrensNumber() + "', '" + employee.getMaritalStatus() + "');");
             return switch (result) {
                 case 1 ->
                     Either.right("El empleado se registró correctamente");
@@ -71,6 +75,9 @@ public class EmployeeProvider {
 
     public Either<String, String> updateEmployee(EmployeeModel employee) {
         try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String formatedDate = formatter.format(employee.getBirthday());
+            System.out.println(formatedDate);
             int result = query.update(""
                     + "UPDATE employee t SET"
                     + " t.name = '" + employee.getName() + "',"
@@ -78,9 +85,9 @@ public class EmployeeProvider {
                     + " t.documentType = '" + employee.getDocumentType() + "',"
                     + " t.documentNumber = '" + employee.getDocumentNumber() + "',"
                     + " t.code = '" + employee.getCode() + "',"
-                    + " t.hasExperience = '" + employee.getHasExperience() + "',"
-                    + " t.birthday = '" + employee.getBirthday() + "',"
-                    + " t.hasChildren = '" + employee.getHasChildren() + "',"
+                    + " t.hasExperience = '" + (employee.getHasExperience() ? 1 : 0) + "',"
+                    + " t.birthday = '" + formatedDate + "',"
+                    + " t.hasChildren = '" + (employee.getHasChildren() ? 1 : 0) + "',"
                     + " t.childrensNumber = '" + employee.getChildrensNumber() + "',"
                     + " t.maritalStatus = '" + employee.getMaritalStatus() + "'"
                     + " WHERE t.id LIKE '" + employee.getId() + "';");

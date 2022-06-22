@@ -34,8 +34,8 @@ public class EditProductSreen extends javax.swing.JFrame {
         descriptionTextField.setText(product.getDescription());
         priceTextField.setText(product.getPrice().toString());
         quantityTextField.setText(product.getQuantity().toString());
-        categoryComboBox.setSelectedItem(product.getCategory());
-        supplierComboBox.setSelectedItem(product.getSupplier());
+        categoryComboBox.getModel().setSelectedItem(product.getCategory());
+        supplierComboBox.getModel().setSelectedItem(product.getSupplier());
     }
 
     /**

@@ -24,11 +24,12 @@ import javax.swing.UIManager;
  *
  * @author israelgutierrez
  */
-public class AddEmployeeSreen extends javax.swing.JFrame {
+public class EditEmployeeSreen extends javax.swing.JFrame {
+    EmployeeModel employee;
     /**
      * Creates new form EditCategorySreen
      */
-    public AddEmployeeSreen() {
+    public EditEmployeeSreen(EmployeeModel employee) {
         initComponents();
         UUID uuid = UUID.randomUUID();
         idTextField.setText(uuid.toString());
@@ -37,6 +38,23 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
         TextPrompt placeholder = new TextPrompt("dd/mm/yyyy", birthdateTextField);
         placeholder.changeAlpha(0.75f);
         placeholder.changeStyle(Font.ITALIC);
+        
+        
+        this.employee = employee;
+        idTextField.setText(employee.getId());
+        nameTextField.setText(employee.getName());
+        lastnameTextField.setText(employee.getLastname());
+        birthdateTextField.setText(new SimpleDateFormat("dd/MM/yyyy").format(employee.getBirthday()));
+        documentTypeComboBox.setSelectedItem(employee.getDocumentType());
+        documentNumberTextField.setText(employee.getDocumentNumber());
+        
+        hasExperienceRadioButton.setSelected(employee.getHasExperience());
+        doesntHasExperienceRadioButton.setSelected(!employee.getHasExperience());
+        
+        hasChildremRadioButton.setSelected(employee.getHasChildren());
+        doesntHasChildremRadioButton.setSelected(!employee.getHasChildren());
+        
+        maritalStatusComboBox.setSelectedItem(employee.getMaritalStatus());
     }
 
     /**
@@ -70,14 +88,14 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
         doesntHasExperienceRadioButton = new javax.swing.JRadioButton();
         jLabel9 = new javax.swing.JLabel();
         hasChildremRadioButton = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
+        doesntHasChildremRadioButton = new javax.swing.JRadioButton();
         jLabel10 = new javax.swing.JLabel();
         maritalStatusComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        jLabel1.setText("Añadir Empleado");
+        jLabel1.setText("Editar Empleado");
 
         jLabel2.setText("ID");
 
@@ -140,8 +158,8 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
             }
         });
 
-        hasChildrenGroup.add(jRadioButton4);
-        jRadioButton4.setText("No");
+        hasChildrenGroup.add(doesntHasChildremRadioButton);
+        doesntHasChildremRadioButton.setText("No");
 
         jLabel10.setText("Estado civil");
 
@@ -186,7 +204,7 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(hasChildremRadioButton)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jRadioButton4))
+                                        .addComponent(doesntHasChildremRadioButton))
                                     .addComponent(jLabel8)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(hasExperienceRadioButton)
@@ -212,7 +230,6 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -228,7 +245,6 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(29, 29, 29)))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -248,7 +264,7 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
                                 .addComponent(lastnameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(hasChildremRadioButton)
-                                .addComponent(jRadioButton4))
+                                .addComponent(doesntHasChildremRadioButton))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addGap(28, 28, 28)))
@@ -292,7 +308,7 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
                     new GroupButtonUtils().getSelectedButtonText(hasChildrenGroup).equals("Si"), 
                     0, 
                     maritalStatusComboBox.getSelectedItem().toString());
-            Either<String, String> response = new EmployeeController().onAdd(employee);
+            Either<String, String> response = new EmployeeController().onEdit(employee);
             if (response.isRight()) {
                 JOptionPane.showMessageDialog(null, response.right().get());
             } else {
@@ -338,7 +354,7 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddEmployeeSreen().setVisible(true);
+                new EditEmployeeSreen(new EmployeeModel()).setVisible(true);
             }
         });
     }
@@ -348,6 +364,7 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
     private javax.swing.JButton cancelButton;
     private javax.swing.JTextField documentNumberTextField;
     private javax.swing.JComboBox<String> documentTypeComboBox;
+    private javax.swing.JRadioButton doesntHasChildremRadioButton;
     private javax.swing.JRadioButton doesntHasExperienceRadioButton;
     private javax.swing.JRadioButton hasChildremRadioButton;
     private javax.swing.ButtonGroup hasChildrenGroup;
@@ -364,7 +381,6 @@ public class AddEmployeeSreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JTextField lastnameTextField;
     private javax.swing.JComboBox<String> maritalStatusComboBox;
     private javax.swing.JTextField nameTextField;

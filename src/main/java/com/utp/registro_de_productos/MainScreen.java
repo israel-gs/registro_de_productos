@@ -10,11 +10,15 @@ import com.utp.registro_de_productos.controller.EmployeeController;
 import com.utp.registro_de_productos.controller.ProductController;
 import com.utp.registro_de_productos.controller.ReportsController;
 import com.utp.registro_de_productos.controller.SupplierController;
+import com.utp.registro_de_productos.controller.UserController;
 import com.utp.registro_de_productos.model.CategoryModel;
+import com.utp.registro_de_productos.model.EmployeeModel;
 import com.utp.registro_de_productos.model.ProductModel;
 import com.utp.registro_de_productos.model.SupplierModel;
 import com.utp.registro_de_productos.model.UserModel;
+import com.utp.registro_de_productos.provider.EmployeeProvider;
 import com.utp.registro_de_productos.provider.ProductProvider;
+import com.utp.registro_de_productos.provider.UserProvider;
 import io.vavr.control.Either;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -29,10 +33,15 @@ import javax.swing.table.TableModel;
  * @author israelgutierrez
  */
 public class MainScreen extends javax.swing.JFrame {
+
     UserModel user;
     ArrayList<ProductModel> products = new ArrayList<>();
+    ArrayList<EmployeeModel> employees = new ArrayList<>();
+    ArrayList<UserModel> users = new ArrayList<>();
+
     /**
      * Creates new form MainScreen
+     *
      * @param user
      */
     public MainScreen(UserModel user) {
@@ -923,7 +932,7 @@ public class MainScreen extends javax.swing.JFrame {
         }
         categoryTable.setVisible(true);
     }
-    
+
     private void loadSupplierTable() {
         supplierTable.setVisible(false);
         Either<String, TableModel> response = new SupplierController().onLoad();
@@ -935,7 +944,7 @@ public class MainScreen extends javax.swing.JFrame {
         }
         supplierTable.setVisible(true);
     }
-    
+
     private void loadProductTable() {
         productTable.setVisible(false);
         Either<String, ArrayList<ProductModel>> productsResponse = new ProductProvider().getProducts();
@@ -954,6 +963,10 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void loadEmployeeTable() {
         employeeTable.setVisible(false);
+        Either<String, ArrayList<EmployeeModel>> employeesResponse = new EmployeeProvider().getEmployees();
+        if (employeesResponse.isRight()) {
+            this.employees = employeesResponse.right().get();
+        }
         Either<String, TableModel> response = new EmployeeController().onLoad();
         if (response.isRight()) {
             employeeTable.setModel(response.right().get());
@@ -963,7 +976,23 @@ public class MainScreen extends javax.swing.JFrame {
         }
         employeeTable.setVisible(true);
     }
-    
+
+    private void loadUserTable() {
+        userTable.setVisible(false);
+        Either<String, ArrayList<UserModel>> userResponse = new UserProvider().getUsers();
+        if (userResponse.isRight()) {
+            this.users = userResponse.right().get();
+        }
+        Either<String, TableModel> response = new UserController().onLoad();
+        if (response.isRight()) {
+            userTable.setModel(response.right().get());
+        }
+        if (response.isLeft()) {
+            JOptionPane.showMessageDialog(null, response.left().get(), "Advertencia", JOptionPane.ERROR_MESSAGE);
+        }
+        userTable.setVisible(true);
+    }
+
     private void registerCategoryPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerCategoryPanelComponentShown
         this.loadCategoryTable();
     }//GEN-LAST:event_registerCategoryPanelComponentShown
@@ -1148,7 +1177,7 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_productEditButtonActionPerformed
 
     private void productDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productDeleteButtonActionPerformed
-        int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar este pruducto?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar este producto?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (option == JOptionPane.YES_OPTION) {
             int selectedRow = productTable.getSelectedRow();
             String id = productTable.getValueAt(selectedRow, 0).toString();
@@ -1185,7 +1214,7 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_employeeTableMouseClicked
 
     private void employeeAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeAddButtonActionPerformed
-       AddEmployeeSreen screen = new AddEmployeeSreen();
+        AddEmployeeSreen screen = new AddEmployeeSreen();
         screen.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -1201,7 +1230,22 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_employeeAddButtonActionPerformed
 
     private void employeeEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeEditButtonActionPerformed
-        // TODO add your handling code here:
+        EmployeeModel employee = new EmployeeModel();
+        int selectedRow = employeeTable.getSelectedRow();
+        employee = employees.get(selectedRow);
+        EditEmployeeSreen screen = new EditEmployeeSreen(employee);
+        screen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadEmployeeTable();
+                employeeEditButton.setEnabled(false);
+                employeeDeleteButton.setEnabled(false);
+            }
+        });
+        screen.pack();
+        screen.setResizable(false);
+        screen.setLocationRelativeTo(null);
+        screen.setVisible(true);
     }//GEN-LAST:event_employeeEditButtonActionPerformed
 
     private void employeeDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeDeleteButtonActionPerformed
@@ -1212,7 +1256,7 @@ public class MainScreen extends javax.swing.JFrame {
             Either<String, String> response = new EmployeeController().onDelete(id);
             if (response.isRight()) {
                 JOptionPane.showMessageDialog(null, response.right().get());
-                this.loadProductTable();
+                this.loadEmployeeTable();
             } else {
                 JOptionPane.showMessageDialog(null, response.left().get());
             }
@@ -1231,27 +1275,71 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_registerEmployeePanelComponentShown
 
     private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
-        // TODO add your handling code here:
+        if (evt.getClickCount() == 1) {
+            userEditButton.setEnabled(true);
+            userDeleteButton.setEnabled(true);
+        }
     }//GEN-LAST:event_userTableMouseClicked
 
     private void userAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userAddButtonActionPerformed
-        // TODO add your handling code here:
+        AddUserScreen screen = new AddUserScreen();
+        screen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadUserTable();
+                userEditButton.setEnabled(false);
+                userDeleteButton.setEnabled(false);
+            }
+        });
+        screen.pack();
+        screen.setResizable(false);
+        screen.setLocationRelativeTo(null);
+        screen.setVisible(true);
     }//GEN-LAST:event_userAddButtonActionPerformed
 
     private void userEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userEditButtonActionPerformed
-        // TODO add your handling code here:
+        UserModel user = new UserModel();
+        int selectedRow = userTable.getSelectedRow();
+        user = users.get(selectedRow);
+        EditUserScreen screen = new EditUserScreen(user);
+        screen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadUserTable();
+                userEditButton.setEnabled(false);
+                userDeleteButton.setEnabled(false);
+            }
+        });
+        screen.pack();
+        screen.setResizable(false);
+        screen.setLocationRelativeTo(null);
+        screen.setVisible(true);
     }//GEN-LAST:event_userEditButtonActionPerformed
 
     private void userDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userDeleteButtonActionPerformed
-        // TODO add your handling code here:
+        int option = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar este usuario?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (option == JOptionPane.YES_OPTION) {
+            int selectedRow = userTable.getSelectedRow();
+            String id = userTable.getValueAt(selectedRow, 0).toString();
+            Either<String, String> response = new UserController().onDelete(id);
+            if (response.isRight()) {
+                JOptionPane.showMessageDialog(null, response.right().get());
+                this.loadUserTable();
+            } else {
+                JOptionPane.showMessageDialog(null, response.left().get());
+            }
+        }
+        userEditButton.setEnabled(false);
+        userDeleteButton.setEnabled(false);
     }//GEN-LAST:event_userDeleteButtonActionPerformed
 
     private void registerUserPanelComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerUserPanelComponentHidden
-        // TODO add your handling code here:
+        userEditButton.setEnabled(false);
+        userDeleteButton.setEnabled(false);
     }//GEN-LAST:event_registerUserPanelComponentHidden
 
     private void registerUserPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerUserPanelComponentShown
-        // TODO add your handling code here:
+        this.loadUserTable();
     }//GEN-LAST:event_registerUserPanelComponentShown
 
     private void registerEmployeePanel1ComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerEmployeePanel1ComponentHidden
@@ -1267,11 +1355,11 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_registerUserPanel1ComponentHidden
 
     private void registerUserPanel1ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerUserPanel1ComponentShown
-        // TODO add your handling code here:
+        this.loadUserTable();
     }//GEN-LAST:event_registerUserPanel1ComponentShown
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       new ReportsController().generateProductsReport();
+        new ReportsController().generateProductsReport();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -1301,9 +1389,9 @@ public class MainScreen extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            UIManager.setLookAndFeel( new FlatLightLaf() );
-        } catch( Exception ex ) {
-            System.err.println( "Failed to initialize LaF" );
+            UIManager.setLookAndFeel(new FlatLightLaf());
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
         }
         //</editor-fold>
 
