@@ -8,6 +8,17 @@ public class UserModel {
     private String password;
     private boolean isAdmin;
 
+    public UserModel() {
+    }
+
+    public UserModel(String id, EmployeeModel employee, String usermane, String password, boolean isAdmin) {
+        this.id = id;
+        this.employee = employee;
+        this.usermane = usermane;
+        this.password = password;
+        this.isAdmin = isAdmin;
+    }
+
     public String getId() {
         return id;
     }

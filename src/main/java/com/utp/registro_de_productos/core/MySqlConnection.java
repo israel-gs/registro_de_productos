@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MySqlConnection {
-    
+
     public static String db = "registro_de_productos";
 
     public static Connection createConnection() {

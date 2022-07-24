@@ -28,7 +28,8 @@ public class ProductProvider {
                                               p.supplierId  as supplierId,
                                               s.name        as supplierName,
                                               s.ruc         as supplierRuc,
-                                              s.phone       as supplierPhone
+                                              s.phone       as supplierPhone,
+                                              s.email       as supplierEmail
                                        from product p
                                                 inner join category c on c.id = p.categoryId
                                                 inner join supplier s on p.supplierId = s.id;""");
@@ -40,7 +41,48 @@ public class ProductProvider {
                 product.setPrice(rs.getDouble("productPrice"));
                 product.setQuantity(rs.getInt("productQuantity"));
                 product.setCategory(new CategoryModel(rs.getString("categoryId"), rs.getString("categoryName"), rs.getString("categoryDescription")));
-                product.setSupplier(new SupplierModel(rs.getString("supplierId"), rs.getString("supplierName"), rs.getString("supplierRuc"), rs.getString("supplierPhone")));
+                product.setSupplier(new SupplierModel(rs.getString("supplierId"), rs.getString("supplierName"), rs.getString("supplierRuc"), rs.getString("supplierPhone"), rs.getString("supplierEmail")));
+                products.add(product);
+            }
+            return Either.right(products);
+        } catch (Exception e) {
+            System.out.println(e);
+            return Either.left("Ocurrió un error");
+        }
+    }
+
+    public Either<String, ArrayList<ProductModel>> getProductsBySupplierId(String supplierId) {
+        ArrayList<ProductModel> products = new ArrayList<>();
+        try {
+            String script = String.format("""
+                                       select p.id          as producId,
+                                              p.name        as productName,
+                                              p.description as productDescription,
+                                              p.price       as productPrice,
+                                              p.quantity    as productQuantity,
+                                              p.categoryId  as categoryId,
+                                              c.name        as categoryName,
+                                              c.description as categoryDescription,
+                                              p.supplierId  as supplierId,
+                                              s.name        as supplierName,
+                                              s.ruc         as supplierRuc,
+                                              s.phone       as supplierPhone,
+                                              s.email       as supplierEmail
+                                       from product p
+                                                inner join category c on c.id = p.categoryId
+                                                inner join supplier s on p.supplierId = s.id
+                                       where p.supplierId = '%s'
+                                       ;""", supplierId);
+            ResultSet rs = query.query(script);
+            while (rs.next()) {
+                ProductModel product = new ProductModel();
+                product.setId(rs.getString("producId"));
+                product.setName(rs.getString("productName"));
+                product.setDescription(rs.getString("productDescription"));
+                product.setPrice(rs.getDouble("productPrice"));
+                product.setQuantity(rs.getInt("productQuantity"));
+                product.setCategory(new CategoryModel(rs.getString("categoryId"), rs.getString("categoryName"), rs.getString("categoryDescription")));
+                product.setSupplier(new SupplierModel(rs.getString("supplierId"), rs.getString("supplierName"), rs.getString("supplierRuc"), rs.getString("supplierPhone"), rs.getString("supplierEmail")));
                 products.add(product);
             }
             return Either.right(products);

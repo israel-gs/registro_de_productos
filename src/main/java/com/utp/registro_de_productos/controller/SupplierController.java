@@ -18,8 +18,9 @@ public class SupplierController {
             model.addColumn("Nombre");
             model.addColumn("Ruc");
             model.addColumn("Teléfono");
+            model.addColumn("Email");
             suppliers.forEach((supplier) -> {
-                Object[] data = {supplier.getID(), supplier.getName(), supplier.getRuc(), supplier.getPhone()};
+                Object[] data = {supplier.getID(), supplier.getName(), supplier.getRuc(), supplier.getPhone(), supplier.getEmail()};
                 model.addRow(data);
             });
             return Either.right(model);

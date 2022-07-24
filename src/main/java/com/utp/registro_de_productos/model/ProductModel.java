@@ -78,5 +78,10 @@ public class ProductModel {
     public void setSupplier(SupplierModel supplier) {
         this.supplier = supplier;
     }
+    
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
 }

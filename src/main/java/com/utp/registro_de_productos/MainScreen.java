@@ -7,22 +7,34 @@ package com.utp.registro_de_productos;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.utp.registro_de_productos.controller.CategoryController;
 import com.utp.registro_de_productos.controller.EmployeeController;
+import com.utp.registro_de_productos.controller.OutgoingInventoryController;
 import com.utp.registro_de_productos.controller.ProductController;
 import com.utp.registro_de_productos.controller.ReportsController;
 import com.utp.registro_de_productos.controller.SupplierController;
+import com.utp.registro_de_productos.controller.SupplierNotificationController;
 import com.utp.registro_de_productos.controller.UserController;
+import com.utp.registro_de_productos.core.MySqlConnection;
 import com.utp.registro_de_productos.model.CategoryModel;
 import com.utp.registro_de_productos.model.EmployeeModel;
+import com.utp.registro_de_productos.model.OutgoingInventoryModel;
 import com.utp.registro_de_productos.model.ProductModel;
 import com.utp.registro_de_productos.model.SupplierModel;
+import com.utp.registro_de_productos.model.SupplierNotificationModel;
 import com.utp.registro_de_productos.model.UserModel;
 import com.utp.registro_de_productos.provider.EmployeeProvider;
+import com.utp.registro_de_productos.provider.OutgoingInventoryProvider;
 import com.utp.registro_de_productos.provider.ProductProvider;
+import com.utp.registro_de_productos.provider.SupplierNotificationProvider;
 import com.utp.registro_de_productos.provider.UserProvider;
 import io.vavr.control.Either;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -38,6 +50,8 @@ public class MainScreen extends javax.swing.JFrame {
     ArrayList<ProductModel> products = new ArrayList<>();
     ArrayList<EmployeeModel> employees = new ArrayList<>();
     ArrayList<UserModel> users = new ArrayList<>();
+    ArrayList<OutgoingInventoryModel> outgoingInventory = new ArrayList<>();
+    ArrayList<SupplierNotificationModel> supplierNotification = new ArrayList<>();
 
     /**
      * Creates new form MainScreen
@@ -109,12 +123,23 @@ public class MainScreen extends javax.swing.JFrame {
         peopleTabbedPane1 = new javax.swing.JTabbedPane();
         registerEmployeePanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        registerEmployeePanel2 = new javax.swing.JPanel();
+        jButton4 = new javax.swing.JButton();
         registerUserPanel1 = new javax.swing.JPanel();
+        employeeReportButton = new javax.swing.JButton();
         controlPanel = new javax.swing.JPanel();
-        jTabbedPane4 = new javax.swing.JTabbedPane();
-        peoplePanel6 = new javax.swing.JPanel();
-        peoplePanel7 = new javax.swing.JPanel();
+        outgoingInventoryTabbedPane = new javax.swing.JTabbedPane();
+        outgoingInventoryPanel = new javax.swing.JPanel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        outgoingInventoryTable = new javax.swing.JTable();
+        jPanel7 = new javax.swing.JPanel();
+        outgoingInventoryAddButton = new javax.swing.JButton();
+        outgoingInventoryPdfButton = new javax.swing.JButton();
+        supplierNotificationPanel = new javax.swing.JPanel();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        supplierNotificationTable = new javax.swing.JTable();
+        jPanel9 = new javax.swing.JPanel();
+        addNotificationButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         roleLabel = new javax.swing.JLabel();
@@ -772,32 +797,54 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/file-pdf.png"))); // NOI18N
-        jButton2.setText("Generar Reporte de Proveedores ( .pdf)");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout registerEmployeePanel1Layout = new javax.swing.GroupLayout(registerEmployeePanel1);
         registerEmployeePanel1.setLayout(registerEmployeePanel1Layout);
         registerEmployeePanel1Layout.setHorizontalGroup(
             registerEmployeePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
+            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
         );
         registerEmployeePanel1Layout.setVerticalGroup(
             registerEmployeePanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(registerEmployeePanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(191, Short.MAX_VALUE))
+                .addContainerGap(256, Short.MAX_VALUE))
         );
 
         peopleTabbedPane1.addTab("Reporte de productos", registerEmployeePanel1);
+
+        registerEmployeePanel2.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                registerEmployeePanel2ComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                registerEmployeePanel2ComponentShown(evt);
+            }
+        });
+
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/file-pdf.png"))); // NOI18N
+        jButton4.setText("Generar Reporte de Proveedores ( .pdf)");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout registerEmployeePanel2Layout = new javax.swing.GroupLayout(registerEmployeePanel2);
+        registerEmployeePanel2.setLayout(registerEmployeePanel2Layout);
+        registerEmployeePanel2Layout.setHorizontalGroup(
+            registerEmployeePanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
+        );
+        registerEmployeePanel2Layout.setVerticalGroup(
+            registerEmployeePanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(registerEmployeePanel2Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(253, Short.MAX_VALUE))
+        );
+
+        peopleTabbedPane1.addTab("Reporte de proveedores", registerEmployeePanel2);
 
         registerUserPanel1.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
@@ -808,18 +855,29 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
 
+        employeeReportButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/file-excel.png"))); // NOI18N
+        employeeReportButton.setText("Generar Reporte de Empleados ( .xlsx)");
+        employeeReportButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeeReportButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout registerUserPanel1Layout = new javax.swing.GroupLayout(registerUserPanel1);
         registerUserPanel1.setLayout(registerUserPanel1Layout);
         registerUserPanel1Layout.setHorizontalGroup(
             registerUserPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 721, Short.MAX_VALUE)
+            .addComponent(employeeReportButton, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
         );
         registerUserPanel1Layout.setVerticalGroup(
             registerUserPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 321, Short.MAX_VALUE)
+            .addGroup(registerUserPanel1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(employeeReportButton, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(253, Short.MAX_VALUE))
         );
 
-        peopleTabbedPane1.addTab("Reporte de personas", registerUserPanel1);
+        peopleTabbedPane1.addTab("Reporte de empleados", registerUserPanel1);
 
         javax.swing.GroupLayout reportsPanelLayout = new javax.swing.GroupLayout(reportsPanel);
         reportsPanel.setLayout(reportsPanelLayout);
@@ -838,31 +896,197 @@ public class MainScreen extends javax.swing.JFrame {
 
         mainMenu.addTab("Reportes", new javax.swing.ImageIcon(getClass().getResource("/file-download.png")), reportsPanel); // NOI18N
 
-        javax.swing.GroupLayout peoplePanel6Layout = new javax.swing.GroupLayout(peoplePanel6);
-        peoplePanel6.setLayout(peoplePanel6Layout);
-        peoplePanel6Layout.setHorizontalGroup(
-            peoplePanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 721, Short.MAX_VALUE)
+        outgoingInventoryPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                outgoingInventoryPanelComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                outgoingInventoryPanelComponentShown(evt);
+            }
+        });
+
+        outgoingInventoryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Id", "Nombre", "RUC", "Teléfono"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        outgoingInventoryTable.setColumnSelectionAllowed(true);
+        outgoingInventoryTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                outgoingInventoryTableMouseClicked(evt);
+            }
+        });
+        jScrollPane8.setViewportView(outgoingInventoryTable);
+        outgoingInventoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (outgoingInventoryTable.getColumnModel().getColumnCount() > 0) {
+            outgoingInventoryTable.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        outgoingInventoryAddButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus.png"))); // NOI18N
+        outgoingInventoryAddButton.setText("Añadir");
+        outgoingInventoryAddButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                outgoingInventoryAddButtonActionPerformed(evt);
+            }
+        });
+
+        outgoingInventoryPdfButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/file-pdf.png"))); // NOI18N
+        outgoingInventoryPdfButton.setText("Ver guia");
+        outgoingInventoryPdfButton.setEnabled(false);
+        outgoingInventoryPdfButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                outgoingInventoryPdfButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(outgoingInventoryAddButton)
+                .addGap(18, 18, 18)
+                .addComponent(outgoingInventoryPdfButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        peoplePanel6Layout.setVerticalGroup(
-            peoplePanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(outgoingInventoryAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(outgoingInventoryPdfButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane4.addTab("Control de productos", peoplePanel6);
-
-        javax.swing.GroupLayout peoplePanel7Layout = new javax.swing.GroupLayout(peoplePanel7);
-        peoplePanel7.setLayout(peoplePanel7Layout);
-        peoplePanel7Layout.setHorizontalGroup(
-            peoplePanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 721, Short.MAX_VALUE)
+        javax.swing.GroupLayout outgoingInventoryPanelLayout = new javax.swing.GroupLayout(outgoingInventoryPanel);
+        outgoingInventoryPanel.setLayout(outgoingInventoryPanelLayout);
+        outgoingInventoryPanelLayout.setHorizontalGroup(
+            outgoingInventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        peoplePanel7Layout.setVerticalGroup(
-            peoplePanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+        outgoingInventoryPanelLayout.setVerticalGroup(
+            outgoingInventoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, outgoingInventoryPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE))
         );
 
-        jTabbedPane4.addTab("Control de empleados", peoplePanel7);
+        outgoingInventoryTabbedPane.addTab("Control de productos", outgoingInventoryPanel);
+
+        supplierNotificationPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                supplierNotificationPanelComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                supplierNotificationPanelComponentShown(evt);
+            }
+        });
+
+        supplierNotificationTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Id", "Nombre", "RUC", "Teléfono"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        supplierNotificationTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                supplierNotificationTableMouseClicked(evt);
+            }
+        });
+        jScrollPane10.setViewportView(supplierNotificationTable);
+        supplierNotificationTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (supplierNotificationTable.getColumnModel().getColumnCount() > 0) {
+            supplierNotificationTable.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        addNotificationButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus.png"))); // NOI18N
+        addNotificationButton.setText("Añadir");
+        addNotificationButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addNotificationButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(addNotificationButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(addNotificationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout supplierNotificationPanelLayout = new javax.swing.GroupLayout(supplierNotificationPanel);
+        supplierNotificationPanel.setLayout(supplierNotificationPanelLayout);
+        supplierNotificationPanelLayout.setHorizontalGroup(
+            supplierNotificationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        supplierNotificationPanelLayout.setVerticalGroup(
+            supplierNotificationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, supplierNotificationPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE))
+        );
+
+        outgoingInventoryTabbedPane.addTab("Notificar Productos", supplierNotificationPanel);
 
         javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
         controlPanel.setLayout(controlPanelLayout);
@@ -870,11 +1094,11 @@ public class MainScreen extends javax.swing.JFrame {
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane4))
+                .addComponent(outgoingInventoryTabbedPane))
         );
         controlPanelLayout.setVerticalGroup(
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane4)
+            .addComponent(outgoingInventoryTabbedPane)
         );
 
         mainMenu.addTab("Control", new javax.swing.ImageIcon(getClass().getResource("/user-check.png")), controlPanel); // NOI18N
@@ -918,12 +1142,15 @@ public class MainScreen extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(mainMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(closeSessionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(roleLabel)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(roleLabel)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(closeSessionButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1000,6 +1227,38 @@ public class MainScreen extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, response.left().get(), "Advertencia", JOptionPane.ERROR_MESSAGE);
         }
         userTable.setVisible(true);
+    }
+    
+    private void loadSupplierNotification() {
+        supplierNotificationTable.setVisible(false);
+        Either<String, ArrayList<SupplierNotificationModel>> reponse = new SupplierNotificationProvider().getSupplierNotifications();
+        if (reponse.isRight()) {
+            this.supplierNotification = reponse.right().get();
+        }
+        Either<String, TableModel> response2 = new SupplierNotificationController().onLoad();
+        if (response2.isRight()) {
+            supplierNotificationTable.setModel(response2.right().get());
+        }
+        if (response2.isLeft()) {
+            JOptionPane.showMessageDialog(null, response2.left().get(), "Advertencia", JOptionPane.ERROR_MESSAGE);
+        }
+        supplierNotificationTable.setVisible(true);
+    }
+    
+    private void loadOutgoingInventoryTable() {
+        outgoingInventoryTable.setVisible(false);
+        Either<String, ArrayList<OutgoingInventoryModel>> outgoingInventoryResponse = new OutgoingInventoryProvider().getOutgoingInventories();
+        if (outgoingInventoryResponse.isRight()) {
+            this.outgoingInventory = outgoingInventoryResponse.right().get();
+        }
+        Either<String, TableModel> response = new OutgoingInventoryController().onLoad();
+        if (response.isRight()) {
+            outgoingInventoryTable.setModel(response.right().get());
+            outgoingInventoryTable.setVisible(true);
+        }
+        if (response.isLeft()) {
+            JOptionPane.showMessageDialog(null, response.left().get(), "Advertencia", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void registerCategoryPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerCategoryPanelComponentShown
@@ -1212,6 +1471,11 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_registerProductoPanelComponentShown
 
     private void closeSessionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeSessionButtonActionPerformed
+        Connection connection = MySqlConnection.createConnection();
+        Login login = new Login(connection != null);
+        login.setResizable(false);
+        login.setLocationRelativeTo(null);
+        login.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_closeSessionButtonActionPerformed
 
@@ -1371,10 +1635,6 @@ public class MainScreen extends javax.swing.JFrame {
         new ReportsController().generateProductsReport();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new ReportsController().generateSupplierReport();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void categoryTableComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_categoryTableComponentShown
         // TODO add your handling code here:
     }//GEN-LAST:event_categoryTableComponentShown
@@ -1387,6 +1647,95 @@ public class MainScreen extends javax.swing.JFrame {
         int tabIndex = productTabbedPane.getSelectedIndex();
         System.out.println(tabIndex);
     }//GEN-LAST:event_productTabbedPaneStateChanged
+
+    private void outgoingInventoryTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_outgoingInventoryTableMouseClicked
+        if (evt.getClickCount() == 1) {
+            outgoingInventoryPdfButton.setEnabled(true);
+        }
+    }//GEN-LAST:event_outgoingInventoryTableMouseClicked
+
+    private void outgoingInventoryAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outgoingInventoryAddButtonActionPerformed
+        AddOutgoingInventorySreen screen = new AddOutgoingInventorySreen();
+        screen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadOutgoingInventoryTable();
+            }
+        });
+        screen.pack();
+        screen.setResizable(false);
+        screen.setLocationRelativeTo(null);
+        screen.setVisible(true);        
+    }//GEN-LAST:event_outgoingInventoryAddButtonActionPerformed
+
+    private void outgoingInventoryPdfButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_outgoingInventoryPdfButtonActionPerformed
+        int selectedRow = outgoingInventoryTable.getSelectedRow();
+        OutgoingInventoryModel a = outgoingInventory.get(selectedRow);
+        new OutgoingInventoryController().generatePdf(a.getId());
+    }//GEN-LAST:event_outgoingInventoryPdfButtonActionPerformed
+
+    private void outgoingInventoryPanelComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_outgoingInventoryPanelComponentHidden
+        // TODO add your handling code here:
+    }//GEN-LAST:event_outgoingInventoryPanelComponentHidden
+
+    private void outgoingInventoryPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_outgoingInventoryPanelComponentShown
+        // TODO add your handling code here:
+        loadOutgoingInventoryTable();
+    }//GEN-LAST:event_outgoingInventoryPanelComponentShown
+
+    private void supplierNotificationTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierNotificationTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_supplierNotificationTableMouseClicked
+
+    private void addNotificationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNotificationButtonActionPerformed
+        AddSupplierNotificationSreen screen = new AddSupplierNotificationSreen();
+        screen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                loadSupplierNotification();
+                employeeEditButton.setEnabled(false);
+                employeeDeleteButton.setEnabled(false);
+            }
+        });
+        screen.pack();
+        screen.setResizable(false);
+        screen.setLocationRelativeTo(null);
+        screen.setVisible(true);
+    }//GEN-LAST:event_addNotificationButtonActionPerformed
+
+    private void supplierNotificationPanelComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_supplierNotificationPanelComponentHidden
+        // TODO add your handling code here:
+    }//GEN-LAST:event_supplierNotificationPanelComponentHidden
+
+    private void supplierNotificationPanelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_supplierNotificationPanelComponentShown
+        loadSupplierNotification();
+    }//GEN-LAST:event_supplierNotificationPanelComponentShown
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        new ReportsController().generateSupplierReport();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void registerEmployeePanel2ComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerEmployeePanel2ComponentHidden
+        // TODO add your handling code here:
+    }//GEN-LAST:event_registerEmployeePanel2ComponentHidden
+
+    private void registerEmployeePanel2ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_registerEmployeePanel2ComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_registerEmployeePanel2ComponentShown
+
+    private void employeeReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeReportButtonActionPerformed
+        try {
+            final JFileChooser fc = new JFileChooser();
+            fc.setDialogTitle("Guardar reporte");
+            fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int returnVal = fc.showSaveDialog(MainScreen.this);
+            if (returnVal == 0) {
+                String path = fc.getSelectedFile().getAbsolutePath();
+                new ReportsController().generateEmpleoyeeReport(path);
+            }
+        } catch (IOException ex) {
+        }
+    }//GEN-LAST:event_employeeReportButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1417,6 +1766,7 @@ public class MainScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addNotificationButton;
     private javax.swing.JButton categoryAddButton;
     private javax.swing.JButton categoryDeleteButton;
     private javax.swing.JButton categoryEditButton;
@@ -1426,9 +1776,10 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton employeeAddButton;
     private javax.swing.JButton employeeDeleteButton;
     private javax.swing.JButton employeeEditButton;
+    private javax.swing.JButton employeeReportButton;
     private javax.swing.JTable employeeTable;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1437,16 +1788,22 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JTabbedPane jTabbedPane4;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane mainMenu;
+    private javax.swing.JButton outgoingInventoryAddButton;
+    private javax.swing.JPanel outgoingInventoryPanel;
+    private javax.swing.JButton outgoingInventoryPdfButton;
+    private javax.swing.JTabbedPane outgoingInventoryTabbedPane;
+    private javax.swing.JTable outgoingInventoryTable;
     private javax.swing.JPanel peoplePanel;
-    private javax.swing.JPanel peoplePanel6;
-    private javax.swing.JPanel peoplePanel7;
     private javax.swing.JTabbedPane peopleTabbedPane;
     private javax.swing.JTabbedPane peopleTabbedPane1;
     private javax.swing.JButton productAddButton;
@@ -1458,6 +1815,7 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JPanel registerCategoryPanel;
     private javax.swing.JPanel registerEmployeePanel;
     private javax.swing.JPanel registerEmployeePanel1;
+    private javax.swing.JPanel registerEmployeePanel2;
     private javax.swing.JPanel registerProductoPanel;
     private javax.swing.JPanel registerSupplierPanel;
     private javax.swing.JPanel registerUserPanel;
@@ -1467,6 +1825,8 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JButton supplierAddButton;
     private javax.swing.JButton supplierDeleteButton;
     private javax.swing.JButton supplierEditButton;
+    private javax.swing.JPanel supplierNotificationPanel;
+    private javax.swing.JTable supplierNotificationTable;
     private javax.swing.JTable supplierTable;
     private javax.swing.JButton userAddButton;
     private javax.swing.JButton userDeleteButton;

@@ -6,15 +6,17 @@ public class SupplierModel {
     private String name;
     private String ruc;
     private String phone;
+    private String email;
 
     public SupplierModel() {
     }
 
-    public SupplierModel(String id, String name, String ruc, String phone) {
+    public SupplierModel(String id, String name, String ruc, String phone, String email) {
         this.id = id;
         this.name = name;
         this.ruc = ruc;
         this.phone = phone;
+        this.email = email;
     }
 
     public String getID() {
@@ -47,6 +49,14 @@ public class SupplierModel {
 
     public void setPhone(String value) {
         this.phone = value;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String value) {
+        this.email = value;
     }
 
     @Override
